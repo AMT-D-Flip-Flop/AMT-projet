@@ -1,8 +1,11 @@
 package com.amt.dflipflop.Controllers;
 import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
+import com.amt.dflipflop.Repositories.Research;
 import com.amt.dflipflop.Services.CategoryService;
 import com.amt.dflipflop.Services.ProductService;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.nio.file.*;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -40,6 +44,8 @@ public class StoreController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private Research research;
 
     @GetMapping("/store")
     public String getStorePage(@RequestParam(value = "cat", required = false) Integer catId, Model model) {
@@ -100,7 +106,7 @@ public class StoreController {
      * @throws IOException If write fail
      */
     @PostMapping(path="/store/add-product") // Map ONLY POST Requests
-    public String addNewProduct (@ModelAttribute("product") Product product, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes redirectAttrs) throws IOException {
+    public String addNewProduct (@ModelAttribute("product") Product product, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes redirectAttrs, Model model) throws IOException {
 
         final String uploadDir = "src/main/resources/static/images";
         final String defaultImgName = "default.png";
@@ -109,6 +115,16 @@ public class StoreController {
         // Error in the format of the data submitted
         if(result.hasErrors()){
             redirectAttrs.addFlashAttribute("message", "Something went wrong, please retry");
+            return "add-product";
+        }
+
+        List<Product> test = research.searchDescription("coucou");
+        System.out.println("Helllooooooooo wooooorld");
+        System.out.println(test.toString());
+        System.exit(0);
+        // Check for duplicate description
+        if (true){
+            model.addAttribute("status", "A product with this description is already on the store");
             return "add-product";
         }
 

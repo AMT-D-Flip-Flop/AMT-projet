@@ -1,7 +1,14 @@
 package com.amt.dflipflop.Entities;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.TermVector;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+
 import javax.persistence.*;
 
+@Indexed
 @Entity // This tells Hibernate to make a table out of this class
 public class Product {
 
@@ -21,6 +28,7 @@ public class Product {
 
     private String name;
 
+    @Field(termVector = TermVector.YES)
     private String description;
 
     @OneToOne
