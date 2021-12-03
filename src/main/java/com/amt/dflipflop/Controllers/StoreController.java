@@ -121,12 +121,14 @@ public class StoreController {
         List<Product> test = research.searchDescription("coucou");
         System.out.println("Helllooooooooo wooooorld");
         System.out.println(test.toString());
-        System.exit(0);
+        //System.exit(0);
         // Check for duplicate description
-        if (true){
+        /*if (true){
+            ArrayList<Category> categories = categoryService.getAll();
+            model.addAttribute("categories", categories);
             model.addAttribute("status", "A product with this description is already on the store");
             return "add-product";
-        }
+        }*/
 
         // Process if an image has been selected
         if (!multipartFile.isEmpty()) {
