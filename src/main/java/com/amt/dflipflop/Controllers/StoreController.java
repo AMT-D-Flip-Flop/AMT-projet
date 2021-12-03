@@ -1,11 +1,8 @@
 package com.amt.dflipflop.Controllers;
 import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
-import com.amt.dflipflop.Repositories.Research;
 import com.amt.dflipflop.Services.CategoryService;
 import com.amt.dflipflop.Services.ProductService;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,8 +41,6 @@ public class StoreController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
-    @Autowired
-    private Research research;
 
     @GetMapping("/store")
     public String getStorePage(@RequestParam(value = "cat", required = false) Integer catId, Model model) {
@@ -118,9 +113,9 @@ public class StoreController {
             return "add-product";
         }
 
-        List<Product> test = research.searchDescription("coucou");
+        //List<Product> test = research.searchDescription("coucou");
         System.out.println("Helllooooooooo wooooorld");
-        System.out.println(test.toString());
+        //System.out.println(test.toString());
         //System.exit(0);
         // Check for duplicate description
         /*if (true){

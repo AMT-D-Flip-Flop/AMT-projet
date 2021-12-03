@@ -1,6 +1,5 @@
 package com.amt.dflipflop.Repositories;
 
-import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
 import org.springframework.data.repository.CrudRepository;
 
