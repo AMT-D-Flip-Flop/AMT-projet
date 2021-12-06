@@ -4,9 +4,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### Lucene index ###
-com.amt.dflipflop.Entities.Product/
-
 ### STS ###
 .apt_generated
 .classpath

@@ -113,17 +113,14 @@ public class StoreController {
             return "add-product";
         }
 
-        //List<Product> test = research.searchDescription("coucou");
-        System.out.println("Helllooooooooo wooooorld");
-        //System.out.println(test.toString());
-        //System.exit(0);
         // Check for duplicate description
-        /*if (true){
+        Product duplicateProdDescription = productService.descriptionExist(product.getDescription());
+        if (duplicateProdDescription != null){
             ArrayList<Category> categories = categoryService.getAll();
             model.addAttribute("categories", categories);
-            model.addAttribute("status", "A product with this description is already on the store");
+            model.addAttribute("status", "The product \"" + duplicateProdDescription.getName() + "\" has the same description");
             return "add-product";
-        }*/
+        }
 
         // Process if an image has been selected
         if (!multipartFile.isEmpty()) {
