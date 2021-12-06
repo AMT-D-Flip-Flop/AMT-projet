@@ -56,6 +56,9 @@
 							<a class="nav-item nav-link" href="/store">Store</a>
 							<a class="nav-item nav-link" href="/login">Login</a>
 							<a class="nav-item nav-link" href="/register">Register</a>
+							<div sec:authorize="isAuthenticated()">
+								<a class="nav-item nav-link" href="/logout">logout</a>
+							</div>
                            <a class="nav-item nav-link last" href="#"><img src="images/search_icon.png"></a>
                            <a class="nav-item nav-link last" href="contact.html"><img src="images/shop_icon.png"></a>
                         </div>

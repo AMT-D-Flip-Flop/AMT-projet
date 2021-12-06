@@ -16,7 +16,14 @@
 
             <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
             <div class="number_text"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
-            <button class="buy_text">Add to shopping cart</button>
+            <form method="POST" action="/cart/add"  class="consectetur_text">
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
+                    <label>Quantité</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                </div>
+                <button type="submit" class="buy_text">Add to cart</button>
+            </form>
         </div>
         <div class="presentation_text" th:text="${product.getDescription()}"></div><br/>
         <div class="presentation_text" th:text="' (' + ${product.getCategoryName()} + ')'"></div>

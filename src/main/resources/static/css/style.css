@@ -818,3 +818,37 @@ a:hover {
     margin-top: 32pt;
     font-size:14pt;
 }
+
+.cart-items{
+    margin: 20px;
+}
+
+.cart-product-table input{
+    width: 60px;
+    text-align: center;
+}
+
+.cart-product-image{
+    width: 100px;
+}
+
+.cart-product-table td{
+    padding: 10px;
+}
+
+.empty-cart{
+    padding: 4px;
+}
+.empty-cart > a{
+    color: black;
+}
+
+
+.cart-container {
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+.empty-cart-text{
+    text-align: center;
+}

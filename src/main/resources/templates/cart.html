@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/components :: head('Cart')"></head>
+<!-- body -->
+<body class="main-layout">
+<!-- header section start -->
+<div th:replace="fragments/components :: menu"></div>
+<div class="collection_text">Shopping Cart</div>
+<div class="layout_padding cart-container">
+    <div class="container">
+        <h1 th:if="${cart.getSelections().size() == 0}" class="new_text cart-title"><strong>The cart is empty</strong></h1>
+        <h1 th:if="${cart.getSelections().size() > 0}" class="new_text cart-title"><strong>Products in da Shopping Cart</strong></h1>
+    </div>
+</div>
+    <div class="cart-items" th:if="${cart.getSelections().size() > 0}">
+        <button class="empty-cart btn btn-primary" style="color: white"><a style="color: white" href="/cart/empty">Empty Cart</a></button>
+        <div>
+            <form action="#" th:action="@{/cart}" th:object="${cart}" method="post">
+                <fieldset>
+                    <table style="width: 100%;margin: 30px 0px;color:black;">
+                        <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody class="cart-product-table">
+
+
+                        <tr th:each="selection, itemStat : *{getSelections()}">
+                            <td>
+                                <img class="cart-product-image" th:src="${selection.getProduct().getImageRelativePath()}" th:alt="${selection.getProduct().getName()}"/>
+                            </td>
+                            <td th:text="${selection.getProduct().getName()}"></td>
+                            <td th:text="${selection.getProduct().getPrice()}"></td>
+
+                            <td><input type="number" th:field="*{selections[__${itemStat.index}__].quantity}" /></td>
+                            <td><button class="btn btn-primary"><a style="color: white" th:href="'/cart/remove/' + ${selection.getProduct().getId()}">Delete</a></button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" id="submitButton" class="btn btn-primary" th:value="Save">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+<!-- New Arrivals section end -->
+<!-- section footer start -->
+<div th:replace="fragments/components :: footer"></div>
+<div th:replace="fragments/components :: copyright"></div>
+<div th:replace="fragments/components :: scripts"></div>
+</body>
+</html>

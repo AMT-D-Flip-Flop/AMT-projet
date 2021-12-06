@@ -49,14 +49,13 @@
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-item nav-link" href="/">Home</a>
-                            <a class="nav-item nav-link" href="collection">Collection</a>
-                            <a class="nav-item nav-link" href="shoes">Shoes</a>
-                            <a class="nav-item nav-link" href="racing boots">Racing Boots</a>
-                            <a class="nav-item nav-link" href="contact">Contact</a>
                             <a class="nav-item nav-link" href="/store">Store</a>
                             <a class="nav-item nav-link" href="/login">Login</a>
+                            <div sec:authorize="isAuthenticated()">
+                                <a class="nav-item nav-link" href="/logout">logout</a>
+                            </div>
                             <a class="nav-item nav-link" href="/register">Register</a>
-                            <a class="nav-item nav-link last" href="/checkout"><img src="images/shop_icon.png"></a>
+                            <a class="nav-item nav-link last" href="/cart"><img src="images/shop_icon.png"></a>
                         </div>
                     </div>
                 </nav>

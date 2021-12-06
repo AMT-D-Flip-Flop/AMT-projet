@@ -24,7 +24,7 @@ import java.util.Map;
 @Controller
 public class StoreController {
 
-    @GetMapping("/insert_items") // Uncomment if needed
+    /*@GetMapping("/insert_items") // Uncomment if needed
     public String insertItems(Model model) {
         productService.insert(new Product("Produit 1", "Super produit 1", 3.5f, "shoes-img3.png"));
         productService.insert(new Product("Produit 2", "Super produit 2", 6.7f, "shoes-img9.png"));
@@ -34,7 +34,7 @@ public class StoreController {
         productService.insert(new Product("Produit 6", "Super produit 6", 12f, "shoes-img9.png"));
 
         return "redirect:store";
-    }
+    }*/
 
 
     @Autowired
