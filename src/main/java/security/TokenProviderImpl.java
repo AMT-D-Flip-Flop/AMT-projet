@@ -39,7 +39,7 @@ public class TokenProviderImpl implements TokenProvider {
     //Define the key choice for jwt
     private String mode = "prod";
     //private String mode = "noProd";
-    private String jwtfileNamePath = "zone_secret/jwt.txt";
+    private String jwtfileNamePath = "/opt/tomcat/webapps/zone_secret/jwt.txt";
 
     @Value("${authentication-test.auth.tokenExpirationMsec}")
     private Long tokenExpirationMsec;
