@@ -158,8 +158,7 @@ public class TokenProviderImpl implements TokenProvider {
 
     @Override
     public boolean validateToken(String token) throws Exception {
-        return true;
-        /*generateKey();
+        generateKey();
         try {
            // https://stackoverflow.com/questions/65306718/io-jsonwebtoken-signatureexception-jwt-signature-does-not-match-locally-compute
 
@@ -178,6 +177,6 @@ public class TokenProviderImpl implements TokenProvider {
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
         }
-        return false;*/
+        return false;
     }
 }
