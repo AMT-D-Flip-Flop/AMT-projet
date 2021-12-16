@@ -16,9 +16,13 @@ import java.io.IOException;
 
 
 @Controller
+// DPE - De manière générale, il serait intéressant de cacher la logique métier du controller,
+// Du coup vos services ferais un peu plus que juste appeler les repositories
+// Une piste à explorer : https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
 public class CartController {
 
 
+    // DPE - Utilisez plutôt un constructeur : https://stackoverflow.com/a/40620318
     @Autowired
     private CartService cartService;
 

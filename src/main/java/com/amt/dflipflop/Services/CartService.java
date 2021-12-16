@@ -17,6 +17,7 @@ public class CartService {
     private CartRepository cartRepository;
 
     @Autowired
+    // DPE - Supprimer les choses que vous n'utilisez plus
     private ProductSelectionService selectionService;
 
     public ArrayList<Cart> getAll() {
@@ -33,8 +34,10 @@ public class CartService {
 
         Iterable<Cart> it = cartRepository.findAll();
 
+        // DPE - Normalement intellij vous fit qu'il y a un refactor à faire ici ;)
         for (Iterator<Cart> i = it.iterator(); i.hasNext(); ){
             Cart cart = i.next();
+            // DPE - Ici aussi ;)
             if(cart.getUserId() == userId)
                 return cart;
         }
