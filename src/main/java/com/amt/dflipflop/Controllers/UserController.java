@@ -2,9 +2,11 @@ package com.amt.dflipflop.Controllers;
 
 import com.amt.dflipflop.Entities.authentification.CustomAuthenticationProvider;
 import com.amt.dflipflop.Entities.authentification.CustomUserDetails;
+import com.amt.dflipflop.Entities.authentification.UserJson;
 import com.amt.dflipflop.Services.CustomUserDetailsService;
 import com.amt.dflipflop.Entities.authentification.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 
 @Controller
@@ -31,7 +34,6 @@ public class UserController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private AuthenticationManager authenticationManager = new AuthenticationManager() {
         CustomAuthenticationProvider cp = new CustomAuthenticationProvider();
-
         @Override
         public Authentication authenticate(Authentication authentication) throws AuthenticationException {
             return cp.authenticate(authentication);
@@ -60,13 +62,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        //model.addAttribute("name", name);
-        model.addAttribute("user", new User());
-        return "authentification/signin_form";
 
-    }
 
     @Value("${serverAuthentication.login}")
     private String serverAuthentication;
@@ -137,6 +133,16 @@ public class UserController {
         return "authentification/signup_form";
     }
 
+    @GetMapping("/login")
+    public String login(Model model) {
+        //model.addAttribute("name", name);
+        model.addAttribute("user", new User());
+        return "authentification/signin_form";
+
+    }
+
+
+
     @GetMapping("/register_success")
     public String showRegisterSuccessForm() {
         return "authentification/register_success";
@@ -153,42 +159,18 @@ public class UserController {
          */
         //
         //String createPersonUrl = "http://mobile.iict.ch/api/json";");
-        String createPersonUrl = serverAuthenticationRegister;
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Data attached to the request.
-        HttpEntity<User> requestBody = new HttpEntity<>(user);
-
-        // Send request with POST method.
-        try {
-            ResponseEntity<User> result
-                    = restTemplate.postForEntity(createPersonUrl, requestBody, User.class);
-
-            User u = result.getBody();
-
-            System.out.println("Status code:" + result.getStatusCode());
-
-            // Code = 200.
-            if (result.getStatusCode() == HttpStatus.OK) {
-                /* User e = result.getBody();
-                 */
-                return "redirect:/login";
-                //return "redirect:register_success";
-            } else {
-                return "authentification/signup_form";
-                //return "signup_form";
-            }
-        } catch (Exception e) {
+        CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
+        if (register.userIsNull()) {
             return "redirect:/register";
+        }else{
+            return "redirect:/login";
         }
-
     }
 
     @GetMapping("/profile")
     public String profilePage(Model model){
         if(authenticatedUser == null){
-            return "redirect:login";
+            return "redirect:/login";
         }
 
         model.addAttribute("user", authenticatedUser);

@@ -128,5 +128,52 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     }
 
+    public CustomUserDetails signup(String username, String password, String serverRegister) {
+// create headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        RestTemplate restTemplate = new RestTemplate();
+        UserJson user = new UserJson();
+        user.setPassword(password);
+        user.setUsername(username);
+
+        // Data attached to the request.
+        HttpEntity<UserJson> requestBody = new HttpEntity<>(user, headers);
+
+        // Send request with POST method.
+        ResponseEntity<UserJson> result = null;
+        try{
+            result = restTemplate.postForEntity(serverRegister, requestBody, UserJson.class);
+        }catch(Exception e){
+            return  new CustomUserDetails(null);
+        }
+
+        UserJson userJsonResponse = result.getBody();
+
+        // Error
+        /*if(userJsonResponse.getError() != null){
+            throw new UsernameNotFoundException(userJsonResponse.getError());
+        }*/
+        if(userJsonResponse == null || userJsonResponse.getUsername() == null){
+            throw new UsernameNotFoundException("User not registered");
+        }
+        if (result.getStatusCode() == HttpStatus.OK) {
+            CustomUserDetails cs = new CustomUserDetails(userJsonResponse);
+            return cs;
+            /*User u = new User();
+            u.setUsername(username);
+            u.setToken(userJsonResponse.getToken());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+             Optional.of(jwtProvider.createToken(username, user.get().getRoles()));
+
+             token = Optional.ofNullable(user.getToken());*/
+        }else{
+            throw new UsernameNotFoundException("Error from server");
+        }
+    }
+
 
 }
