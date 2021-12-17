@@ -88,9 +88,16 @@ app.post('/accounts/register', jsonParser, function (
     req, res) {
     console.log(req.body)
     users.push(req.body)
-
+    /*res.json({
+        "error":[
+            {
+                "test" : "test"
+            }
+        ]
+    })*/
     res.json({
         "username": req.body.username,
+        "id": 0,
         "role": "admin"
     })
 })
