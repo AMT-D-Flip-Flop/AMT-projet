@@ -49,13 +49,14 @@ public class ProductService {
 
     /**
      * Returns a list of products related to the given category
-     * @param cat id of category
-     * @return the list of products filtered with the category
-     * @implNote It is not optimal, but I couldn't find a better way to implement it with hibernate
      */
     public ArrayList<Product> getProductsByCategory(Integer cat){
         Category category = categoryService.get(cat);
-
         return productRepository.getProductsByCategoriesContains(category);
+    }
+
+    public void removeCategoryFromProduct(Product product, Category category){
+        product.removeCategory(category);
+        productRepository.save(product);
     }
 }
