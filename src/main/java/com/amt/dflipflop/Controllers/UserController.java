@@ -2,9 +2,11 @@ package com.amt.dflipflop.Controllers;
 
 import com.amt.dflipflop.Entities.authentification.CustomAuthenticationProvider;
 import com.amt.dflipflop.Entities.authentification.CustomUserDetails;
+import com.amt.dflipflop.Entities.authentification.UserJson;
 import com.amt.dflipflop.Services.CustomUserDetailsService;
 import com.amt.dflipflop.Entities.authentification.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 
 @Controller
@@ -31,7 +34,6 @@ public class UserController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private AuthenticationManager authenticationManager = new AuthenticationManager() {
         CustomAuthenticationProvider cp = new CustomAuthenticationProvider();
-
         @Override
         public Authentication authenticate(Authentication authentication) throws AuthenticationException {
             return cp.authenticate(authentication);
@@ -60,13 +62,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        //model.addAttribute("name", name);
-        model.addAttribute("user", new User());
-        return "authentification/signin_form";
 
-    }
 
     @Value("${serverAuthentication.login}")
     private String serverAuthentication;
@@ -81,49 +77,50 @@ public class UserController {
      */
     @PostMapping("/login")
     //@ResponseBody
-    public String login(@RequestParam("username") String username, @RequestParam("password") String pwd,
-                        Model model, HttpServletResponse response, HttpServletRequest req) {
+    public String login(User user,
+                         HttpServletResponse response, HttpServletRequest req) {
 
-        authenticatedUser = cs.signin(username, pwd, serverAuthentication);
-        if (authenticatedUser.userIsNull()) {
-            return "redirect:/login";
-        }
+        try{
+            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
+            if (authenticatedUser.userIsNull()) {
+                return "authentification/signin_form";
+            }
+            UsernamePasswordAuthenticationToken authRequest
+                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
-        UsernamePasswordAuthenticationToken authRequest
-                = new UsernamePasswordAuthenticationToken(username, pwd);
+            // Authenticate the user
+            Authentication authentication = authenticationManager.authenticate(authRequest);
+            SecurityContext securityContext = SecurityContextHolder.getContext();
 
-        // Authenticate the user
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
 
-        securityContext.setAuthentication(authentication);
-
-        // Create a new session and add the security context.
-        HttpSession session = req.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-        session.setAttribute("id", authenticatedUser.getId());
-        session.setAttribute("user", authenticatedUser);
+            // Create a new session and add the security context.
+            HttpSession session = req.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+            session.setAttribute("id", authenticatedUser.getId());
+            session.setAttribute("user", authenticatedUser);
 
         /*.orElseThrow(()->
                 new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));*/
-        // model.addAttribute("user", u);
-        Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
+            // model.addAttribute("user", u);
+            Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
 
-        // expires in 7 days
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+            // expires in 7 days
+            cookie.setMaxAge(7 * 24 * 60 * 60);
 
-        // optional properties
-        cookie.setSecure(true);
-        //cookie.setHttpOnly(true);
-        cookie.setPath("/");
+            // optional properties
+            cookie.setSecure(true);
+            //cookie.setHttpOnly(true);
+            cookie.setPath("/");
 
-        // add cookie to response
-        response.addCookie(cookie);
+            // add cookie to response
+            response.addCookie(cookie);
 
-        // return response entity
-        // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
-
-
+            // return response entity
+            // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
+        }catch(Exception e){
+            return "authentification/signin_form";
+        }
         //return  "authentification/test";
         return "redirect:/";
         //return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
@@ -136,6 +133,16 @@ public class UserController {
         model.addAttribute("user", new User());
         return "authentification/signup_form";
     }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        //model.addAttribute("name", name);
+        model.addAttribute("user", new User());
+        return "authentification/signin_form";
+
+    }
+
+
 
     @GetMapping("/register_success")
     public String showRegisterSuccessForm() {
@@ -153,34 +160,15 @@ public class UserController {
          */
         //
         //String createPersonUrl = "http://mobile.iict.ch/api/json";");
-        String createPersonUrl = serverAuthenticationRegister;
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Data attached to the request.
-        HttpEntity<User> requestBody = new HttpEntity<>(user);
-
-        // Send request with POST method.
-        try {
-            ResponseEntity<User> result
-                    = restTemplate.postForEntity(createPersonUrl, requestBody, User.class);
-
-            User u = result.getBody();
-
-            System.out.println("Status code:" + result.getStatusCode());
-
-            // Code = 200.
-            if (result.getStatusCode() == HttpStatus.OK) {
-                /* User e = result.getBody();
-                 */
-                return "redirect:/login";
-                //return "redirect:register_success";
-            } else {
+        try{
+            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
+            if (register.userIsNull()) { //OK
                 return "authentification/signup_form";
-                //return "signup_form";
+            }else{
+                return "redirect:/login";
             }
-        } catch (Exception e) {
-            return "redirect:/register";
+        }catch(Exception e){ //OK
+            return "authentification/signup_form";
         }
 
     }
@@ -188,7 +176,7 @@ public class UserController {
     @GetMapping("/profile")
     public String profilePage(Model model){
         if(authenticatedUser == null){
-            return "redirect:login";
+            return "redirect:/login";
         }
 
         model.addAttribute("user", authenticatedUser);
