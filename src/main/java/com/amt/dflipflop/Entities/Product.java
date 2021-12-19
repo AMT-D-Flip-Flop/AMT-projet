@@ -26,7 +26,7 @@ public class Product {
 
     private String description;
 
-    @OneToMany
+    @ManyToMany
     private Set<Category> categories;
 
     private Float price;
