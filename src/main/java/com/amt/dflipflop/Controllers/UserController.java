@@ -77,49 +77,50 @@ public class UserController {
      */
     @PostMapping("/login")
     //@ResponseBody
-    public String login(@RequestParam("username") String username, @RequestParam("password") String pwd,
-                        Model model, HttpServletResponse response, HttpServletRequest req) {
+    public String login(User user,
+                         HttpServletResponse response, HttpServletRequest req) {
 
-        authenticatedUser = cs.signin(username, pwd, serverAuthentication);
-        if (authenticatedUser.userIsNull()) {
-            return "redirect:/login";
-        }
+        try{
+            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
+            if (authenticatedUser.userIsNull()) {
+                return "authentification/signin_form";
+            }
+            UsernamePasswordAuthenticationToken authRequest
+                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
-        UsernamePasswordAuthenticationToken authRequest
-                = new UsernamePasswordAuthenticationToken(username, pwd);
+            // Authenticate the user
+            Authentication authentication = authenticationManager.authenticate(authRequest);
+            SecurityContext securityContext = SecurityContextHolder.getContext();
 
-        // Authenticate the user
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
 
-        securityContext.setAuthentication(authentication);
-
-        // Create a new session and add the security context.
-        HttpSession session = req.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-        session.setAttribute("id", authenticatedUser.getId());
-        session.setAttribute("user", authenticatedUser);
+            // Create a new session and add the security context.
+            HttpSession session = req.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+            session.setAttribute("id", authenticatedUser.getId());
+            session.setAttribute("user", authenticatedUser);
 
         /*.orElseThrow(()->
                 new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));*/
-        // model.addAttribute("user", u);
-        Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
+            // model.addAttribute("user", u);
+            Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
 
-        // expires in 7 days
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+            // expires in 7 days
+            cookie.setMaxAge(7 * 24 * 60 * 60);
 
-        // optional properties
-        cookie.setSecure(true);
-        //cookie.setHttpOnly(true);
-        cookie.setPath("/");
+            // optional properties
+            cookie.setSecure(true);
+            //cookie.setHttpOnly(true);
+            cookie.setPath("/");
 
-        // add cookie to response
-        response.addCookie(cookie);
+            // add cookie to response
+            response.addCookie(cookie);
 
-        // return response entity
-        // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
-
-
+            // return response entity
+            // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
+        }catch(Exception e){
+            return "authentification/signin_form";
+        }
         //return  "authentification/test";
         return "redirect:/";
         //return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
@@ -159,12 +160,17 @@ public class UserController {
          */
         //
         //String createPersonUrl = "http://mobile.iict.ch/api/json";");
-        CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
-        if (register.userIsNull()) {
-            return "redirect:/register";
-        }else{
-            return "redirect:/login";
+        try{
+            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
+            if (register.userIsNull()) { //OK
+                return "authentification/signup_form";
+            }else{
+                return "redirect:/login";
+            }
+        }catch(Exception e){ //OK
+            return "authentification/signup_form";
         }
+
     }
 
     @GetMapping("/profile")

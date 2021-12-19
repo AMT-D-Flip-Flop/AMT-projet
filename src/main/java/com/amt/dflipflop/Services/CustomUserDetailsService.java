@@ -108,7 +108,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserJson userJsonResponse = result.getBody();
 
         // Error
-        if(userJsonResponse.getError() != null){
+        if(userJsonResponse == null || userJsonResponse.getError() != null){
             throw new UsernameNotFoundException(userJsonResponse.getError());
         }
         if (result.getStatusCode() == HttpStatus.OK) {
