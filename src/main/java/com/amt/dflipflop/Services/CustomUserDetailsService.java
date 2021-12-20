@@ -157,7 +157,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(userJsonResponse.getError());
         }*/
         if(userJsonResponse == null || userJsonResponse.getUsername() == null){
-            throw new UsernameNotFoundException("User not registered");
+            //throw new UsernameNotFoundException("User not registered");
         }
         if (result.getStatusCode() == HttpStatus.OK) {
             CustomUserDetails cs = new CustomUserDetails(userJsonResponse);
