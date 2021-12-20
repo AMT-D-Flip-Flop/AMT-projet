@@ -168,6 +168,7 @@ public class UserController {
                 return "redirect:/login";
             }
         }catch(Exception e){ //OK
+            System.out.println(e.toString());
             return "authentification/signup_form";
         }
 

@@ -147,6 +147,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         try{
             result = restTemplate.postForEntity(serverRegister, requestBody, UserJson.class);
         }catch(Exception e){
+            System.out.println(e.toString());
             return  new CustomUserDetails(null);
         }
 
