@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/components :: head('Categories')"></head>
+<!-- body -->
+<body class="main-layout">
+<!-- header section start -->
+<div th:replace="fragments/components :: menu"></div>
+<div class="collection_text" th:text="'Category ' + ${category.getName()} + '\''"></div>
+<div class="product_presentation">
+    <h1 style="color: red">Warning, this category contains:</h1>
+    <div th:each="prod : ${products}" class="col-sm-4">
+        <a th:href="'store/product/' + ${prod.getId()}">
+            <p class="item_name" th:text="${prod.getName()}"></p>
+        </a>
+    </div>
+</div>
+
+
+<div class="collection_section layout_padding product_presentation">
+        <a href="/categories">
+            <button class="btn btn-info">Cancel</button>
+        </a>
+        <a th:href="'/categories/remove?id=' + ${category.getId()} + '&confirm=true'">
+            <button class="btn btn-danger">Continue</button>
+        </a>
+</div>
+
+
+<!-- New Arrivals section end -->
+<!-- section footer start -->
+<div th:replace="fragments/components :: footer"></div>
+<div th:replace="fragments/components :: copyright"></div>
+<div th:replace="fragments/components :: scripts"></div>
+</body>
+</html>

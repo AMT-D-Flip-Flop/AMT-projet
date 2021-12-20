@@ -1,6 +1,8 @@
 package com.amt.dflipflop.Services;
 
+import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
+import com.amt.dflipflop.Repositories.CategoryRepository;
 import com.amt.dflipflop.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class ProductService {
 
         @Autowired
         private ProductRepository productRepository;
+
+        @Autowired
+        private CategoryService categoryService;
 
         public ArrayList<Product> getAll() {
 
@@ -44,22 +49,14 @@ public class ProductService {
 
     /**
      * Returns a list of products related to the given category
-     * @param cat id of category
-     * @return the list of products filtered with the category
-     * @implNote It is not optimal, but I couldn't find a better way to implement it with hibernate
      */
     public ArrayList<Product> getProductsByCategory(Integer cat){
-            ArrayList<Product> products = getAll();
-            ArrayList<Product> filtered = new ArrayList<>();
+        Category category = categoryService.get(cat);
+        return productRepository.getProductsByCategoriesContains(category);
+    }
 
-            for(Product product : products){
-                ArrayList<Integer> categories = product.getCategoriesId();
-
-                if(!categories.isEmpty() && categories.contains(cat)){
-                    filtered.add(product);
-                }
-            }
-
-            return filtered;
-        }
+    public void removeCategoryFromProduct(Product product, Category category){
+        product.removeCategory(category);
+        productRepository.save(product);
+    }
 }
