@@ -14,6 +14,12 @@ public class UserJson implements Serializable {
 
     private String token;
 
+    //Create count
+    private String id;
+
+    //Create role
+    private String role;
+
     public String getError() {
         return error;
     }
