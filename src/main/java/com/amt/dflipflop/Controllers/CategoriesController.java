@@ -74,12 +74,29 @@ public class CategoriesController {
      * @throws IOException If suppress fail
      */
     @GetMapping(path="/categories/remove")
-    public String removeCategory (@RequestParam(value = "id") Integer id, RedirectAttributes redirectAttrs) throws IOException {
+    public String removeCategory (
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "confirm", required = false) Boolean confirm,
+            RedirectAttributes redirectAttrs,
+            Model model
+    ) throws IOException {
 
-        // Check if any item uses this category<
+        // Ask for confirmation if the category is used in articles
         if(!categoryService.isCategoryEmpty(id)){
-            redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, "Category is not empty");
-            return "redirect:/categories";
+
+            Category category = categoryService.get(id);
+            ArrayList<Product> products = productService.getProductsByCategory(id);
+            if(confirm == null || !confirm){
+                model.addAttribute("products", products);
+                model.addAttribute("category", category);
+                redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, "Category is not empty");
+                return "categories_del_confirmation";
+            }
+            else{
+                for(Product product : products){
+                    productService.removeCategoryFromProduct(product, category);
+                }
+            }
         }
 
         // Add the category via a category service

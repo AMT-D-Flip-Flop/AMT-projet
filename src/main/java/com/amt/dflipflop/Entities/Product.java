@@ -26,7 +26,7 @@ public class Product {
 
     private String description;
 
-    @OneToMany
+    @ManyToMany
     private Set<Category> categories;
 
     private Float price;
@@ -65,7 +65,9 @@ public class Product {
         for(Category cat : categories){
             str.append(" "); // supplementary space is needed in the template, so no problem here
             str.append(cat.getName());
+            str.append(",");
         }
+        str.setLength(str.length()-1); // remove last comma
 
         return str.toString();
     }
