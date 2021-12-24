@@ -685,6 +685,9 @@ a:hover {
     padding-top: 30px;
     padding-bottom: 30px;
 }
+.section_footer > .container > .row {
+    justify-content: space-between;
+}
 
 .mail_section {
     width: 100%;
@@ -851,4 +854,20 @@ a:hover {
 }
 .empty-cart-text{
     text-align: center;
+}
+
+.footer_heigvd {
+    color: white;
+    font-size: 24px;
+    min-height: 2em;
+    font-family: 'Gemunu Libre', sans-serif;
+    padding:1em
+}
+
+.social_icon {
+    min-height: 2em;
+    display: flex;
+    column-gap: 1em;
+    align-items: center;
+    padding:1em;
 }
