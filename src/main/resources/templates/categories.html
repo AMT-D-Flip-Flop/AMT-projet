@@ -8,7 +8,7 @@
 <div class="collection_text">Existing categories</div>
 <div class="collection_section layout_padding">
     <div class="container">
-        <h1 class="new_text"><strong>Categories</strong></h1>
+        <h1 class="section_title"><strong>Categories</strong></h1>
     </div>
 </div>
 <div th:replace="fragments/components :: message_display"></div>
@@ -28,8 +28,8 @@
 
 <div class="collection_section layout_padding">
     <div class="container">
-        <h1 class="new_text"><strong>Add a new category</strong></h1>
-        <form method="POST" th:action="@{/categories/add-category}" th:object="${category}" class="consectetur_text">
+        <h1 class="section_title"><strong>Add a new category</strong></h1>
+        <form method="POST" th:action="@{/categories/add-category}" th:object="${category}" class="section_text">
             <div class="form-group">
                 <label for="pName">Name</label>
                 <input type="text" class="form-control" id="pName" th:field="*{name}" required>

@@ -12,12 +12,12 @@
             <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}"/>
         </div>
         <div class="col-md">
-            <h1 class="new_text"><strong th:text="${product.getName()}"></strong><hr/></h1>
+            <h1 class="section_title"><strong th:text="${product.getName()}"></strong><hr/></h1>
             <div th:if="${product.getCategories().size() > 0}" th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
             <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
             <div class="number_text"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
-            <form method="POST" action="/cart/add"  class="consectetur_text">
+            <form method="POST" action="/cart/add"  class="section_text">
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
                     <label>Quantité</label>

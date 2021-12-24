@@ -8,8 +8,8 @@
 <div class="collection_text">Shopping Cart</div>
 <div class="layout_padding cart-container">
     <div class="container">
-        <h1 th:if="${cart.getSelections().size() == 0}" class="new_text cart-title"><strong>The cart is empty</strong></h1>
-        <h1 th:if="${cart.getSelections().size() > 0}" class="new_text cart-title"><strong>Products in da Shopping Cart</strong></h1>
+        <h1 th:if="${cart.getSelections().size() == 0}" class="section_title cart-title"><strong>The cart is empty</strong></h1>
+        <h1 th:if="${cart.getSelections().size() > 0}" class="section_title cart-title"><strong>Products in da Shopping Cart</strong></h1>
     </div>
 </div>
     <div class="cart-items" th:if="${cart.getSelections().size() > 0}">
