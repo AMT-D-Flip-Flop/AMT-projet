@@ -24,8 +24,8 @@
             <!-- new collection section start -->
             <div class="layout_padding collection_section">
                 <div class="container">
-                    <h1 class="section_title">Trending</h1>
-                    <p class="section_text">Our customers love these products</p>
+                    <h1 class="section_title">Trending <i class="fas fa-fire-alt"></i></h1>
+                    <p class="section_text">Our customers love these products</p><span class="ui-icon ui-icon-heart"></span>
                     <div class="collection_section_2">
                         <div class="row">
                             <div class="col-md-6">
@@ -56,7 +56,7 @@
             </div>
             <div class="container ">
                 <div class="collection_section">
-                    <h1 class="section_title"><strong>Our favorite</strong></h1>
+                    <h1 class="section_title"><strong>Our favorite <i class="far fa-heart"></i></strong></h1>
                     <p class="section_text">We recommend taking a look at this, it's the best !</p>
                 </div>
             </div>
@@ -64,17 +64,19 @@
                 <div class="container">
                     <div class="favorite">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-7">
                                 <div class="favorite_img"><img th:src="${favorite.getImageRelativePath()}"
                                                                alt="favorite"></div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="favorite_name"><span th:text="${favorite.getName()}"></span></div>
-                                <div class="favorite_price">CHF <span th:text="${favorite.getPrice()}"></span>
+                            <div class="col-md-3">
+                                <div class="container">
+                                    <div class="favorite_name"><span th:text="${favorite.getName()}"></span></div>
+                                    <div class="favorite_price">CHF <span th:text="${favorite.getPrice()}"></span>
+                                    </div>
+                                    <a th:href="'store/product/' + ${favorite.getId()}">
+                                        <button class="seemore_bt">See More</button>
+                                    </a>
                                 </div>
-                                <a th:href="'store/product/' + ${favorite.getId()}">
-                                    <button class="seemore_bt">See More</button>
-                                </a>
                             </div>
                         </div>
                     </div>

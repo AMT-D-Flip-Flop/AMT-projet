@@ -9,8 +9,6 @@
 
 @import url(animate.min.css);
 @import url(normalize.css);
-@import url(meanmenu.css);
-@import url(owl.carousel.min.css);
 @import url(slick.css);
 @import url(jquery-ui.css);
 @import url(nice-select.css);
@@ -33,6 +31,7 @@ body {
     line-height: 1.80857;
     font-weight: normal;
     overflow-x: hidden;
+    margin:0;
 }
 
 a {
@@ -240,6 +239,10 @@ body {
     padding: 0;
 }
 
+.container-fluid {
+    padding:0;
+}
+
 
 /*------------------------------ vertical bootstrap slider----------------------------*/
 
@@ -396,13 +399,13 @@ body {
 }
 
 .seemore_bt {
-    width: 32%;
+    width: 10em;
     height: 50px;
     color: #ffffff;
     background-color: #ff4e5b;
     font-size: 16pt;
     margin-top: 35px;
-    margin-bottom: 90px;
+    margin-bottom: 35px;
     text-align: center;
 }
 
