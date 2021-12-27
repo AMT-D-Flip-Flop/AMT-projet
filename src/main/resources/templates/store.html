@@ -14,16 +14,18 @@
     </div>
 </div>
 <div th:replace="fragments/components :: message_display"></div>
-<form action="/store" method="get">
-    <select name="cat" hidden>
-        <option disabled hidden selected>Aucune</option>
-        <option th:each="cat : ${categories}"
-                th:value="${cat.getId()}"
-                th:text="${cat.getName()}"
-                th:selected="${cat.getId() == selected}">
-        </option>
-    </select>
-    <button type="submit" class="btn btn-primary">Filter</button>
+<form class="form-group" action="/store" method="get">
+    <div class="container filter-form">
+            <select name="cat" hidden>
+                <option disabled hidden selected>Aucune</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.getId()}"
+                        th:text="${cat.getName()}"
+                        th:selected="${cat.getId() == selected}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-dark">Filter</button>
+    </div>
 </form>
 
 <div class="layout_padding gallery_section">
