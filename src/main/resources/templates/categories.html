@@ -16,7 +16,7 @@
 <div class="layout_padding gallery_section">
     <div class="row">
         <div th:each="cat : ${categories}" class="col-sm-4">
-            <div class="best_shoes">
+            <div class="product_list">
                 <p class="item_name" th:text="${cat.getName()}"></p>
                 <a  th:href="'/categories/remove?id=' + ${cat.getId()}">
                     <button>Remove</button>
