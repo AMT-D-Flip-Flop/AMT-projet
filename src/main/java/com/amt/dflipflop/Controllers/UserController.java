@@ -40,6 +40,7 @@ public class UserController {
         }
     };
 
+
     @GetMapping("/user/orders")
     public String getUserOrders(Model model) {
         return "orders";
@@ -60,9 +61,6 @@ public class UserController {
     String addNewAddress() {
         return "add-address";
     }
-
-
-
 
     @Value("${serverAuthentication.login}")
     private String serverAuthentication;
