@@ -41,12 +41,12 @@
 <div th:fragment="menu" class="header_section header_main">
     <div class="container">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="logo"><a href="#">D-FlipFlop</a></div>
             </div>
-            <div class="col-sm-9">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            <div class="col-sm-8">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light ml-auto">
+                    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
                             data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
                             aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -55,16 +55,15 @@
                         <div class="navbar-nav">
                             <a class="nav-item nav-link" href="/">Home</a>
                             <a class="nav-item nav-link" href="/store">Store</a>
-                            <div sec:authorize="!isAuthenticated()">
-                                <a class="nav-item nav-link" href="/login">Login</a>
-                                <a class="nav-item nav-link" href="/register">Register</a>
-                            </div>
-                            <div sec:authorize="isAuthenticated()">
-                                <a class="nav-item nav-link" href="/profile">Profile</a>
-                                <a class="nav-item nav-link" href="/logout">logout</a>
-                            </div>
+                            <!-- Not Authenticated -->
+                            <a sec:authorize="!isAuthenticated()" class="nav-item nav-link" href="/login">Login</a>
+                            <a sec:authorize="!isAuthenticated()" class="nav-item nav-link" href="/register">Register</a>
+                            <!-- Authenticated -->
+                            <a sec:authorize="isAuthenticated()" class="nav-item nav-link" href="/profile">Profile</a>
+                            <a sec:authorize="isAuthenticated()" class="nav-item nav-link" href="/logout">logout</a>
+                            <!-- -->
+                            <a class="nav-item nav-link" href="/cart"><img src="images/shop_icon.png"></a>
 
-                            <a class="nav-item nav-link last" href="/cart"><img src="images/shop_icon.png"></a>
                         </div>
                     </div>
                 </nav>
