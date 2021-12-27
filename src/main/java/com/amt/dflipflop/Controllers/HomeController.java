@@ -1,6 +1,8 @@
 package com.amt.dflipflop.Controllers;
 
 import com.amt.dflipflop.Entities.Product;
+import com.amt.dflipflop.Entities.ProductSelection;
+import com.amt.dflipflop.Services.ProductSelectionService;
 import com.amt.dflipflop.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,17 +18,17 @@ public class HomeController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductSelectionService productSelectionService;
+
     @GetMapping("/")
     public String index(Model model) {
-        List<Product> products = productService.getAll();
-
-
-        // show the N last products
-        int count = products.size();
-        if(count > NB_LATEST_PRODUCTS)
-            products = products.subList(count - NB_LATEST_PRODUCTS, count);
-
-        model.addAttribute("products", products);
+        List<Product> latest_products = productService.getLast3Products();
+        List<Product> trends = productSelectionService.getTop2Products();
+        Product favorite = productService.getRandom();
+        model.addAttribute("latest_products", latest_products);
+        model.addAttribute("trends", trends);
+        model.addAttribute("favorite", favorite);
         return "index";
     }
 

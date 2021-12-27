@@ -355,9 +355,7 @@ body{
     transform: rotate(90deg);
 }
 .carousel-indicators li{
-    display:block; margin-bottom:5px; border:1px solid #00a199; 
-    margin-bottom: 5px;
-    
+    display:block; margin-bottom:5px; border:1px solid #00a199;
 }
 .carousel-indicators li.active{
     margin-bottom:5px; background:#00a199;
@@ -370,6 +368,7 @@ body{
 	float: left;
 	font-size: 24pt;
 	color: #0c0116;
+    font-weight: bold;
 }
 
 .section_text{
@@ -387,7 +386,7 @@ body{
 	float: left;
 }
 
-.about-img {
+.trend_elem1 {
     width: 100%;
     float: left;
     background-color: #ffffff;
@@ -408,7 +407,7 @@ body{
 	margin-left: -60px;
 }
 
-.shoes-img{
+.trend_img1{
 	width: 100%;
 	float: left;
 	text-align: center;
@@ -426,23 +425,26 @@ body{
     border-bottom: 1px solid#000;
     margin: 0 auto;
 }
-.dolar_text{
+.dollar_text{
 	width: 100%;
 	float: left;
 	text-align:center;
 	color: #000;
 	font-size: 20pt;
 }
+
+.dollar_text > strong {
+    color: #f12a47
+}
 .star_icon{ width: 25%; margin: 0 auto; text-align: center; }
 .star_icon ul{ margin: 0px; padding: 0px;} 
 .star_icon li{ float:left; padding-right:10px; padding-bottom: 25px;}
 
-.about-img2{
+.trend_elem2{
 	width: 100%;
 	float: left;
-	background-image: url(../images/about-img2.png);
-	height: auto;
-	box-shadow: 0px 0px 10px 0px;
+	background-color: #f0f0f0;
+	box-shadow: 0 0 10px 0;
 	margin-left: -50px;
     margin-top: 74px;
 }
@@ -450,7 +452,7 @@ body{
 
 .shoes_img{ width: 100%; float: left; padding-top: 30px; }
 
-.shoes-img2{
+.trend_img2{
 	width: 100%;
 	float: left;
 	text-align: center;
@@ -464,10 +466,10 @@ body{
 	height: 50px;
 	color: #ffffff;
 	background-color: #ff4e5b;
-	color: #ffffff;
 	font-size: 16pt;	
 	margin-top: 35px;
     margin-bottom: 90px;
+    text-align:center;
 }
 
 .collectipn_section_3{ width: 100%; float: left; padding-top: 0px;}
@@ -480,7 +482,7 @@ body{
     background-size: 100%;
     padding-bottom: 70px;
 }
-.shoes-img3{ width: 100%; float: left; text-align: center; }
+.favorite_img{ width: 100%; float: left; text-align: center; }
 
 .collection_text{ 
     width: 100%; 
@@ -501,23 +503,25 @@ body{
 	line-height: 75px;
 }
 
-.number_text{
+.favorite_name {
+    width: 100%;
+    font-weight: bold;
+    float: left;
+    font-size: 45pt;
+    color: #0f0d10;
+    line-height: 75px;
+}
+.favorite_price{
 	width: 100%;
+    font-weight: bolder;
 	float: left;
 	font-size: 45pt;
 	color: #ed2540;
 	line-height: 75px;
-
 }
-
-.seemore{
-	width: 50%;
-	height: 50px;
-	color: #ffffff;
-	background-color: #ff4e5b;
-	color: #ffffff;
-	font-size: 16pt;	
-	margin-top: 35px;
+.favorite_price > span{
+    font-weight: bolder;
+    color: #0f0d10;
 }
 
 .gallery_section{
@@ -525,6 +529,7 @@ body{
 	float: left;
 	background-color: #ff4e5b;
 	height: auto;
+    padding: 50px;
 
 }
 
@@ -676,6 +681,7 @@ a:hover {
     float: left;
     background-color: #272222;
     height: auto;
+    margin-top:90px;
     padding-top: 30px;
     padding-bottom: 30px;
 }
@@ -863,4 +869,12 @@ a:hover {
     column-gap: 1em;
     align-items: center;
     padding:1em;
+}
+
+.section {
+    margin-top:90px;
+}
+
+.centered {
+    text-align:center;
 }
