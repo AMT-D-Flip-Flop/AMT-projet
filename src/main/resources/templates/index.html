@@ -10,109 +10,91 @@
 <div class="banner_section">
     <div class="container-fluid">
         <section class="slide-wrapper">
-            <div class="container-fluid">
-                <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                    <!-- Indicators -->
+            <div class="collection_section section">
+                <div class="container">
+                    <h1 class="section_title">About our shop</h1>
+                    <div class="section_text">
+                        We, D-FlipFlop, used to sell shoes, but this time is far away. Now the tech industry is our
+                        new friend. <br>
+                        We are proud to present you our new collections of high-tech products. (super coool)
+                    </div>
                 </div>
             </div>
             <!-- header section end -->
             <!-- new collection section start -->
             <div class="layout_padding collection_section">
                 <div class="container">
-                    <h1 class="section_title"><strong>New Collection</strong></h1>
-                    <p class="section_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+                    <h1 class="section_title">Trending</h1>
+                    <p class="section_text">Our customers love these products</p>
                     <div class="collection_section_2">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="about-img">
-                                    <button class="new_bt">New</button>
-                                    <div class="shoes-img"><img src="images/shoes-img1.png"></div>
-                                    <p class="sport_text">Men Sports</p>
-                                    <div class="dolar_text">$<strong style="color: #f12a47;">90</strong></div>
-                                    <div class="star_icon">
-                                        <ul>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                        </ul>
+                                <div class="trend_elem1">
+                                    <div class="trend_img1"><img th:src="${trends[0].getImageRelativePath}"
+                                                                 alt="trend 1"></div>
+                                    <h1 class="centered" th:text="${trends[0].getName()}"></h1>
+                                    <div class="dollar_text">CHF <strong th:text="${trends[0].getPrice()}"></strong>
                                     </div>
                                 </div>
-                                <button class="seemore_bt">See More</button>
                             </div>
                             <div class="col-md-6">
-                                <div class="about-img2">
-                                    <div class="shoes-img2"><img src="images/shoes-img2.png"></div>
-                                    <p class="sport_text">Men Sports</p>
-                                    <div class="dolar_text">$<strong style="color: #f12a47;">90</strong></div>
-                                    <div class="star_icon">
-                                        <ul>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                            <li><a href="#"><img src="images/star-icon.png"></a></li>
-                                        </ul>
+                                <div class="trend_elem2">
+                                    <div class="trend_img2"><img th:src="${trends[1].getImageRelativePath}"
+                                                                 alt="trend 2"></div>
+                                    <h1 class="centered" th:text="${trends[1].getName()}"></h1>
+                                    <div class="dollar_text">CHF <strong th:text="${trends[1].getPrice()}"></strong>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="centered"><a href="/store">
+                            <button class="seemore_bt">See More</button>
+                        </a></div>
+
                     </div>
                 </div>
             </div>
-            <div class="collection_section">
-                <div class="container">
-                    <h1 class="section_title"><strong>Racing Boots</strong></h1>
-                    <p class="section_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+            <div class="container ">
+                <div class="collection_section">
+                    <h1 class="section_title"><strong>Our favorite</strong></h1>
+                    <p class="section_text">We recommend taking a look at this, it's the best !</p>
                 </div>
             </div>
-            <div class="collection_section_3 layout_padding">
+            <div class="collection_section_3">
                 <div class="container">
                     <div class="racing_shoes">
                         <div class="row">
                             <div class="col-md-8">
-                                <div class="shoes-img3"><img src="images/shoes-img3.png"></div>
+                                <div class="favorite_img"><img th:src="${favorite.getImageRelativePath()}"
+                                                               alt="favorite"></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="sale_text"><strong>Sale <br><span style="color: #0a0506;">JOGING</span> <br>SHOES</strong>
+                                <div class="favorite_name"><span th:text="${favorite.getName()}"></span></div>
+                                <div class="favorite_price">CHF <span th:text="${favorite.getPrice()}"></span>
                                 </div>
-                                <div class="number_text"><strong>$ <span style="color: #0a0506">100</span></strong>
-                                </div>
-                                <button class="seemore">See More</button>
+                                <a th:href="'store/product/' + ${favorite.getId()}">
+                                    <button class="seemore_bt">See More</button>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="collection_section layout_padding">
+            <div class="section collection_section">
                 <div class="container">
-                    <h1 class="section_title"><strong>New Arrivals Products</strong></h1>
-                    <p class="section_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+                    <h1 class="section_title">New Arrivals Products</h1>
+                    <div class="section_text">Here are some new products for you</div>
                 </div>
-            </div>
-            <!-- new collection section end -->
-            <!-- New Arrivals section start -->
-            <div class="layout_padding gallery_section">
-                <div th:replace="fragments/gallery :: list_items(${products})"></div>
-                <div class="buy_now_bt">
-                    <a href="store">
-                        <button class="buy_text">Buy Now</button>
-                    </a>
+                <div class="gallery_section">
+                    <div th:replace="fragments/gallery :: list_items(${latest_products})"></div>
+                    <div class="buy_now_bt">
+                        <a href="store">
+                            <button class="buy_text">Buy Now</button>
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- New Arrivals section end -->
-            <div class="collection_section layout_padding">
-                <div class="section_title">About our shop</div>
-                <div class="section_text">
-                    <p>We, D-FlipFlop, used to sell shoes, but this time is far away. Now the tech industry is our new
-                        friend.</p>
-                    <p>We are proud to present you our new collections of high-tech products. (super coool)</p>
-                </div>
-            </div>
 
             <div th:replace="fragments/components :: footer"></div>
             <div th:replace="fragments/components :: copyright"></div>

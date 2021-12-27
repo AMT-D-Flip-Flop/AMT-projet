@@ -2,13 +2,12 @@ package com.amt.dflipflop.Services;
 
 import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
-import com.amt.dflipflop.Repositories.CategoryRepository;
 import com.amt.dflipflop.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,5 +57,15 @@ public class ProductService {
     public void removeCategoryFromProduct(Product product, Category category){
         product.removeCategory(category);
         productRepository.save(product);
+    }
+
+    public List<Product> getLast3Products(){
+        return getAll().subList(0, 3);
+    }
+
+    public Product getRandom(){
+        List<Product> all = getAll();
+        int chosen = (int)(Math.random() * (all.size() - 1));
+        return all.get(chosen);
     }
 }
