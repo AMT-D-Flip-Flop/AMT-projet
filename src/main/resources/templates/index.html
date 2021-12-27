@@ -33,7 +33,7 @@
                                     <div class="trend_img1"><img th:src="${trends[0].getImageRelativePath}"
                                                                  alt="trend 1"></div>
                                     <h1 class="centered" th:text="${trends[0].getName()}"></h1>
-                                    <div class="dollar_text">CHF <strong th:text="${trends[0].getPrice()}"></strong>
+                                    <div class="price_text">CHF <strong th:text="${trends[0].getPrice()}"></strong>
                                     </div>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                                     <div class="trend_img2"><img th:src="${trends[1].getImageRelativePath}"
                                                                  alt="trend 2"></div>
                                     <h1 class="centered" th:text="${trends[1].getName()}"></h1>
-                                    <div class="dollar_text">CHF <strong th:text="${trends[1].getPrice()}"></strong>
+                                    <div class="price_text">CHF <strong th:text="${trends[1].getPrice()}"></strong>
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="collection_section_3">
                 <div class="container">
-                    <div class="racing_shoes">
+                    <div class="favorite">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="favorite_img"><img th:src="${favorite.getImageRelativePath()}"
