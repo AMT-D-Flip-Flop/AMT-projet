@@ -11,6 +11,7 @@
 <div class="collection_section layout_padding">
     <div th:replace="fragments/components :: error_display"></div>
     <div class="container">
+        <div th:replace="fragments/components :: message_display"></div>
         <form th:action="@{/login}" th:object="${user}"
               method="post" style="max-width: 600px; margin: 0 auto;">
             <div class="m-3 section_text">
