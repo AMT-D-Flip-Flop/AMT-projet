@@ -10,6 +10,7 @@
 <div class="collection_text">Sign Up</div>
 <div class="collection_section layout_padding">
     <div class="container">
+        <div th:replace="fragments/components :: message_display"></div>
         <form th:action="@{/process_register}" th:object="${user}"
               method="post" style="max-width: 600px; margin: 0 auto;">
             <div class="m-3 section_text">

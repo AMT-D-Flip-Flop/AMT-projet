@@ -10,6 +10,7 @@
 <!-- New Arrivals section end -->
 <div class="collection_section layout_padding">
     <div class="container">
+        <div th:replace="fragments/components :: message_display"></div>
         <form method="POST" action="#" th:action="@{/store/add-product}" th:object="${product}" enctype="multipart/form-data" class="section_text">
             <div class="form-group">
                 <label for="pName">Product Name</label>

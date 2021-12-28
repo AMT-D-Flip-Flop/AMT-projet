@@ -8,6 +8,7 @@
 <div class="collection_text">Shopping Cart</div>
 <div class="collection_section section">
     <div class="container centered">
+        <div th:replace="fragments/components :: message_display"></div>
         <h1 th:if="${cart.getSelections().size() == 0}" class="section_title cart-title"><strong>The cart is
             empty</strong></h1>
         <h1 th:if="${cart.getSelections().size() > 0}" class="section_title cart-title"><strong>Your shopping
@@ -24,10 +25,8 @@
                             <button type="submit" class="cart_button btn btn-info">
                                 <i class="fas fa-save"></i> Save
                             </button>
-                            <a href="/cart/empty">
-                                <button class="cart_button btn btn-danger">
-                                    <i class="fas fa-ban"></i> Empty Cart
-                                </button>
+                            <a href="/cart/empty" class="cart_button btn btn-danger">
+                                <i class="fas fa-ban"></i> Empty Cart
                             </a>
                         </div>
                     </div>
@@ -67,7 +66,6 @@
             </div>
         </fieldset>
     </form>
-</div>
 </div>
 
 
