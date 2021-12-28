@@ -20,13 +20,14 @@
             <form method="POST" action="/cart/add"  class="section_text">
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
-                    <label>Quantité</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                    <label>Quantity</label>
+                    <div class="add-to-cart">
+                        <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                        <button type="submit" class="btn btn-dark">Add to cart</button>
+                    </div>
                 </div>
-                <button type="submit" class="buy_text">Add to cart</button>
             </form>
         </div>
-
     </div>
 </div>
 
