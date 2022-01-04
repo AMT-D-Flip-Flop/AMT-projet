@@ -22,7 +22,7 @@
             </div>
             <!-- header section end -->
             <!-- new collection section start -->
-            <div class="layout_padding collection_section">
+            <div class="layout_padding collection_section" th:if="${trends.size()} >= 2">
                 <div class="container">
                     <h1 class="section_title">Trending <i class="fas fa-fire-alt"></i></h1>
                     <p class="section_text">Our customers love these products</p>
@@ -54,6 +54,7 @@
                     </div>
                 </div>
             </div>
+            <div th:if="${favorite} != null">
             <div class="container ">
                 <div class="collection_section">
                     <h1 class="section_title"><strong>Our favorite <i class="far fa-heart"></i></strong></h1>
@@ -81,6 +82,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
             <div class="section collection_section">
                 <div class="container">
