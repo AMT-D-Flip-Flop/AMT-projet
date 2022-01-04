@@ -5,7 +5,6 @@
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
-<div th:replace="fragments/components :: message_display"></div>
 <div class="container">
     <div class="product_presentation row">
         <div class="col-md">
@@ -27,6 +26,7 @@
                     </div>
                 </div>
             </form>
+            <div th:replace="fragments/components :: message_display"></div>
         </div>
     </div>
 </div>
