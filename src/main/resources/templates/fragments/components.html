@@ -190,5 +190,10 @@
     <h1 th:if="${success}" th:text="${success}" style="color: green"></h1>
     <h1 th:if="${error}" th:text="${'Error : ' + error}" style="color: red"></h1>
 </div>
+<div th:fragment="error_display">
+    <div th:if="${error}" >
+        <h1 th:each="e : ${error}" th:text="${'Error : ' + e}" style="color: red"></h1>
+    </div>
+</div>
 </body>
 </html>

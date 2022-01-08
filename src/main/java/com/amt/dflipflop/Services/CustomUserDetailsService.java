@@ -12,10 +12,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.client.RestTemplate;
 import security.archive.JwtProvider;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.security.core.userdetails.User.withUsername;
+
+
 
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -29,7 +33,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-
+    public class AuthManagerException extends Exception {
+        public List<String> errors;
+        public AuthManagerException(List<String> errors) {
+            super();
+            this.errors = errors;
+        }
+    }
 
    // @Override
    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,20 +80,11 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @return Optional of the Java Web Token, empty otherwise
      */
 
-    public CustomUserDetails signin(String username, String password, String serverAuthentication) {
+    public CustomUserDetails signin(String username, String password, String serverAuthentication) throws AuthManagerException {
 
 
         //LOGGER.info("New user attempting to sign in");
         Optional<String> token = Optional.empty();
-       /* Optional<User> user = userRepo.findByUsername(username);
-        if (user.isPresent()) {
-            try {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-                token = Optional.of(jwtProvider.createToken(username, user.get().getRoles()));
-            } catch (AuthenticationException e){
-                LOGGER.info("Log in failed for user {}", username);
-            }
-        }*/
         // create headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -102,34 +103,33 @@ public class CustomUserDetailsService implements UserDetailsService {
         try{
             result = restTemplate.postForEntity(serverAuthentication, requestBody, UserJson.class);
         }catch(Exception e){
-            return  new CustomUserDetails(null);
+            throw e;
         }
 
         UserJson userJsonResponse = result.getBody();
 
         // Error
-        if(userJsonResponse == null || userJsonResponse.getError() != null){
-            throw new UsernameNotFoundException(userJsonResponse.getError());
+        if(userJsonResponse == null){
+            List<String> errors = new ArrayList<>();
+            errors.add("Null Response");
+            throw new AuthManagerException(errors);
+        }
+        if(userJsonResponse.getErrors().size() > 0){
+            throw new AuthManagerException(userJsonResponse.getErrors());
         }
         if (result.getStatusCode() == HttpStatus.OK) {
             CustomUserDetails cs = new CustomUserDetails(userJsonResponse);
             return cs;
-            /*User u = new User();
-            u.setUsername(username);
-            u.setToken(userJsonResponse.getToken());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
-             Optional.of(jwtProvider.createToken(username, user.get().getRoles()));
-
-             token = Optional.ofNullable(user.getToken());*/
         }else{
-            throw new UsernameNotFoundException("User not found");
+            List<String> errors = new ArrayList<>();
+            errors.add("Request failed");
+            throw new AuthManagerException(errors);
         }
 
     }
 
-    public CustomUserDetails signup(String username, String password, String serverRegister) {
-// create headers
+    public CustomUserDetails signup(String username, String password, String serverRegister) throws AuthManagerException {
+        // create headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -147,32 +147,28 @@ public class CustomUserDetailsService implements UserDetailsService {
         try{
             result = restTemplate.postForEntity(serverRegister, requestBody, UserJson.class);
         }catch(Exception e){
-            System.out.println(e.toString());
-            return  new CustomUserDetails(null);
+            List<String> errors = new ArrayList<>();
+            errors.add(e.getMessage());
+            throw new AuthManagerException(errors);
         }
 
         UserJson userJsonResponse = result.getBody();
 
-        // Error
-        /*if(userJsonResponse.getError() != null){
-            throw new UsernameNotFoundException(userJsonResponse.getError());
-        }*/
-        if(userJsonResponse == null || userJsonResponse.getUsername() == null){
-            throw new UsernameNotFoundException("User not registered");
+        if(userJsonResponse == null){
+            List<String> errors = new ArrayList<>();
+            errors.add("Null Response");
+            throw new AuthManagerException(errors);
+        }
+        if(userJsonResponse.getErrors().size() > 0){
+            throw new AuthManagerException(userJsonResponse.getErrors());
         }
         if (result.getStatusCode() == HttpStatus.CREATED) {
             CustomUserDetails cs = new CustomUserDetails(userJsonResponse);
             return cs;
-            /*User u = new User();
-            u.setUsername(username);
-            u.setToken(userJsonResponse.getToken());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
-             Optional.of(jwtProvider.createToken(username, user.get().getRoles()));
-
-             token = Optional.ofNullable(user.getToken());*/
         }else{
-            throw new UsernameNotFoundException("Error from server");
+            List<String> errors = new ArrayList<>();
+            errors.add("Request Failed");
+            throw new AuthManagerException(errors);
         }
     }
 
