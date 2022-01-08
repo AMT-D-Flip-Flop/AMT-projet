@@ -19,12 +19,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
+
+import static com.amt.dflipflop.Constants.ERROR_MSG_KEY;
+import static com.amt.dflipflop.Constants.SUCCESS_MSG_KEY;
 
 
 @Controller
@@ -62,8 +67,6 @@ public class UserController {
     }
 
 
-
-
     @Value("${serverAuthentication.login}")
     private String serverAuthentication;
 
@@ -77,7 +80,7 @@ public class UserController {
      */
     @PostMapping("/login")
     //@ResponseBody
-    public String login(User user, HttpServletResponse response, HttpServletRequest req) {
+    public String login(User user, HttpServletResponse response, HttpServletRequest req, RedirectAttributes redirectAttrs) {
         try{
             authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
             if (authenticatedUser.userIsNull()) {
@@ -118,16 +121,15 @@ public class UserController {
             // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
         }
         catch (CustomUserDetailsService.AuthManagerException e){
-
-            return "authentification/signin_form";
+            redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
+            return "redirect:/login";
         }
         catch(Exception e){
-            return "authentification/signin_form";
+            // We don't want to show those errors to the user
+            return "redirect:/login";
         }
-        //return  "authentification/test";
-        return "redirect:/";
-        //return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
 
+        return "redirect:/";
     }
 
 
@@ -138,7 +140,7 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, RedirectAttributes redirectAttrs) {
         //model.addAttribute("name", name);
         model.addAttribute("user", new User());
         return "authentification/signin_form";
@@ -158,7 +160,7 @@ public class UserController {
     https://www.baeldung.com/spring-resttemplate-post-json
      */
     @PostMapping("/process_register")
-    public String processRegister(User user) {
+    public String processRegister(User user, RedirectAttributes redirectAttrs) {
         /*
          */
         //
@@ -168,12 +170,12 @@ public class UserController {
             return "redirect:/login";
         }
         catch (CustomUserDetailsService.AuthManagerException e){
-
-            return "authentification/signup_form";
+            redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
+            return "redirect:/register";
         }
         catch(Exception e){ //OK
             System.out.println(e.toString());
-            return "authentification/signup_form";
+            return "redirect:/register";
         }
 
     }

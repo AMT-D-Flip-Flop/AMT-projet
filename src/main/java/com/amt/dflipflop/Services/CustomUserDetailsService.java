@@ -37,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         public List<String> errors;
         public AuthManagerException(List<String> errors) {
             super();
-            errors = errors;
+            this.errors = errors;
         }
     }
 
