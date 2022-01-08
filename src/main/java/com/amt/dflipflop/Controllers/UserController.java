@@ -77,9 +77,7 @@ public class UserController {
      */
     @PostMapping("/login")
     //@ResponseBody
-    public String login(User user,
-                         HttpServletResponse response, HttpServletRequest req) {
-
+    public String login(User user, HttpServletResponse response, HttpServletRequest req) {
         try{
             authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
             if (authenticatedUser.userIsNull()) {
@@ -118,7 +116,12 @@ public class UserController {
 
             // return response entity
             // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
-        }catch(Exception e){
+        }
+        catch (CustomUserDetailsService.AuthManagerException e){
+
+            return "authentification/signin_form";
+        }
+        catch(Exception e){
             return "authentification/signin_form";
         }
         //return  "authentification/test";
@@ -162,12 +165,13 @@ public class UserController {
         //String createPersonUrl = "http://mobile.iict.ch/api/json";");
         try{
             CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
-            if (register.userIsNull()) { //OK
-                return "authentification/signup_form";
-            }else{
-                return "redirect:/login";
-            }
-        }catch(Exception e){ //OK
+            return "redirect:/login";
+        }
+        catch (CustomUserDetailsService.AuthManagerException e){
+
+            return "authentification/signup_form";
+        }
+        catch(Exception e){ //OK
             System.out.println(e.toString());
             return "authentification/signup_form";
         }
