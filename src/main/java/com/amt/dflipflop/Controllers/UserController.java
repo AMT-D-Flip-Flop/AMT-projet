@@ -6,6 +6,7 @@ import com.amt.dflipflop.Entities.authentification.UserJson;
 import com.amt.dflipflop.Services.CustomUserDetailsService;
 import com.amt.dflipflop.Entities.authentification.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,11 +19,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
+
+import static com.amt.dflipflop.Constants.ERROR_MSG_KEY;
+import static com.amt.dflipflop.Constants.SUCCESS_MSG_KEY;
 
 
 @Controller
@@ -39,7 +46,9 @@ public class UserController {
     };
 
     @GetMapping("/user/orders")
-    public String getUserOrders(Model model) { return "orders"; }
+    public String getUserOrders(Model model) {
+        return "orders";
+    }
 
     @GetMapping("/user/addresses")
     public String getAddressesPage(Model model) {
@@ -51,20 +60,12 @@ public class UserController {
         return "add-address";
     }
 
-    @PostMapping(path="/user/add-address") // Map ONLY POST Requests
+    @PostMapping(path = "/user/add-address") // Map ONLY POST Requests
     public @ResponseBody
-    String addNewAddress () {
+    String addNewAddress() {
         return "add-address";
     }
 
-
-    @GetMapping("/login")
-    public String login(Model model) {
-        //model.addAttribute("name", name);
-        model.addAttribute("user", new User());
-        return "authentification/signin_form";
-
-    }
 
     @Value("${serverAuthentication.login}")
     private String serverAuthentication;
@@ -72,65 +73,64 @@ public class UserController {
     @Value("${serverAuthentication.register}")
     private String serverAuthenticationRegister;
 
+    /*
+    Source :
+     //https://www.baeldung.com/manually-set-user-authentication-spring-security
+    //https://stackoverflow.com/questions/4664893/how-to-manually-set-an-authenticated-user-in-spring-security-springmvc
+     */
     @PostMapping("/login")
     //@ResponseBody
-    public String login(@RequestParam("username") String username, @RequestParam("password") String pwd,
-                        Model model, HttpServletResponse response, HttpServletRequest req) {
+    public String login(User user, HttpServletResponse response, HttpServletRequest req, RedirectAttributes redirectAttrs) {
+        try{
+            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
+            if (authenticatedUser.userIsNull()) {
+                return "authentification/signin_form";
+            }
+            UsernamePasswordAuthenticationToken authRequest
+                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
-        authenticatedUser = cs.signin(username,pwd, serverAuthentication);
-        //https://www.baeldung.com/manually-set-user-authentication-spring-security
-        //https://stackoverflow.com/questions/4664893/how-to-manually-set-an-authenticated-user-in-spring-security-springmvc
-        UsernamePasswordAuthenticationToken authRequest
-                = new UsernamePasswordAuthenticationToken(username, pwd);
+            // Authenticate the user
+            Authentication authentication = authenticationManager.authenticate(authRequest);
+            SecurityContext securityContext = SecurityContextHolder.getContext();
 
-        // Authenticate the user
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
 
-        securityContext.setAuthentication(authentication);
+            // Create a new session and add the security context.
+            HttpSession session = req.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+            session.setAttribute("id", authenticatedUser.getId());
+            session.setAttribute("user", authenticatedUser);
 
-        // Create a new session and add the security context.
-        HttpSession session = req.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-        session.setAttribute("id", authenticatedUser.getId());
-
-                /*.orElseThrow(()->
+        /*.orElseThrow(()->
                 new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));*/
-       // model.addAttribute("user", u);
-        Cookie cookie = new Cookie("bearer",this.authenticatedUser.getToken());
+            // model.addAttribute("user", u);
+            Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
 
-        // expires in 7 days
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+            // expires in 7 days
+            cookie.setMaxAge(7 * 24 * 60 * 60);
 
-        // optional properties
-        cookie.setSecure(true);
-        //cookie.setHttpOnly(true);
-        cookie.setPath("/");
+            // optional properties
+            cookie.setSecure(true);
+            //cookie.setHttpOnly(true);
+            cookie.setPath("/");
 
-        // add cookie to response
-        response.addCookie(cookie);
+            // add cookie to response
+            response.addCookie(cookie);
 
-        // return response entity
-       // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
+            // return response entity
+            // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
+        }
+        catch (CustomUserDetailsService.AuthManagerException e){
+            redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
+            return "redirect:/login";
+        }
+        catch(Exception e){
+            // We don't want to show those errors to the user
+            return "redirect:/login";
+        }
 
-//add cookie to response
-        /*
-        Accéder réponse http
-        création cookie jwt
-        return une page web
-         */
-        //return  "authentification/test";
         return "redirect:/";
-        //return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
-
     }
-
-           /* User e = result.getBody();
-            System.out.println("(Client Side) Employee Created: "+ e.getUsername());
-
-
-    }*/
-
 
 
     @GetMapping("/register")
@@ -138,6 +138,16 @@ public class UserController {
         model.addAttribute("user", new User());
         return "authentification/signup_form";
     }
+
+    @GetMapping("/login")
+    public String login(Model model, RedirectAttributes redirectAttrs) {
+        //model.addAttribute("name", name);
+        model.addAttribute("user", new User());
+        return "authentification/signin_form";
+
+    }
+
+
 
     @GetMapping("/register_success")
     public String showRegisterSuccessForm() {
@@ -150,35 +160,34 @@ public class UserController {
     https://www.baeldung.com/spring-resttemplate-post-json
      */
     @PostMapping("/process_register")
-    public String processRegister(User user) {
+    public String processRegister(User user, RedirectAttributes redirectAttrs) {
         /*
-        */
+         */
         //
         //String createPersonUrl = "http://mobile.iict.ch/api/json";");
-        String createPersonUrl = "http://localhost:3000/accounts/register";
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Data attached to the request.
-        HttpEntity<User> requestBody = new HttpEntity<>(user);
-
-        // Send request with POST method.
-        ResponseEntity<User> result
-                = restTemplate.postForEntity(createPersonUrl, requestBody, User.class);
-
-        User u = result.getBody();
-
-        System.out.println("Status code:" + result.getStatusCode());
-
-        // Code = 200.
-        if (result.getStatusCode() == HttpStatus.OK) {
-           /* User e = result.getBody();
-            */
-            return "authentification/register_success";
-            //return "redirect:register_success";
-        }else{
-            return "authentification/signup_form";
-            //return "signup_form";
+        try{
+            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
+            return "redirect:/login";
         }
+        catch (CustomUserDetailsService.AuthManagerException e){
+            redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
+            return "redirect:/register";
+        }
+        catch(Exception e){ //OK
+            System.out.println(e.toString());
+            return "redirect:/register";
+        }
+
+    }
+
+    @GetMapping("/profile")
+    public String profilePage(Model model){
+        if(authenticatedUser == null){
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", authenticatedUser);
+
+        return "authentification/profile";
     }
 }

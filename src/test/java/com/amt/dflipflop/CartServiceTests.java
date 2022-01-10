@@ -47,7 +47,7 @@ public class CartServiceTests {
 
     @Test
     public void testCartCreation() throws Exception {
-        Cart cart = new Cart();
+        Cart cart = new Cart(0);
         Cart saved = cartRepository.save(cart);
 
         Assertions.assertNotNull(saved);
@@ -60,7 +60,7 @@ public class CartServiceTests {
         Product p = new Product("Honda", "Civic", (float) 12.5, "2", 5);
         productRepository.save(p);
 
-        Cart cart = new Cart();
+        Cart cart = new Cart(0);
         ProductSelection sel = new ProductSelection();
         sel.setProduct(p);
         sel.setQuantity(2);

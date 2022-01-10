@@ -5,15 +5,16 @@
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
+<div th:replace="fragments/components :: message_display"></div>
 <div class="container">
     <div class="product_presentation row">
-
         <div class="col-md">
             <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}"/>
         </div>
         <div class="col-md">
             <h1 class="new_text"><strong th:text="${product.getName()}"></strong><hr/></h1>
-
+            <div th:if="${product.getCategories().size() > 0}" th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
+            <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
             <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
             <div class="number_text"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
             <form method="POST" action="/cart/add"  class="consectetur_text">
@@ -25,8 +26,7 @@
                 <button type="submit" class="buy_text">Add to cart</button>
             </form>
         </div>
-        <div class="presentation_text" th:text="${product.getDescription()}"></div><br/>
-        <div class="presentation_text" th:text="' (' + ${product.getCategoryName()} + ')'"></div>
+
     </div>
 </div>
 

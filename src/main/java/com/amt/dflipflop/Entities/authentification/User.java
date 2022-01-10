@@ -1,31 +1,22 @@
 /**
- * Date de création     : 16.10.2021
+ * Date de création     : 06.12.2021
  * Dernier contributeur : Ryan Sauge
  * Groupe               : AMT-D-Flip-Flop
- * Description          : Tester la connexion avec tomcat
- * Remarque             : -
- * Sources :
- * https://www.baeldung.com/spring-boot-testresttemplate
+ * Description          : représente un utilisateur
  */
 
 package com.amt.dflipflop.Entities.authentification;
-
-import org.hibernate.annotations.Table;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.*;
 
 
 @Entity
 public class User {
-
-
-
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String username;

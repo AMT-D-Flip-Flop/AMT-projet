@@ -25,19 +25,6 @@ import java.util.Map;
 @Controller
 public class StoreController {
 
-    /*@GetMapping("/insert_items") // Uncomment if needed
-    public String insertItems(Model model) {
-        productService.insert(new Product("Produit 1", "Super produit 1", 3.5f, "shoes-img3.png"));
-        productService.insert(new Product("Produit 2", "Super produit 2", 6.7f, "shoes-img9.png"));
-        productService.insert(new Product("Produit 3", "Super produit 3", 33f, "shoes-img4.png"));
-        productService.insert(new Product("Produit 4", "Super produit 4", 11.4f, "shoes-img9.png"));
-        productService.insert(new Product("Produit 5", "Super produit 5", 42f, "shoes-img2.png"));
-        productService.insert(new Product("Produit 6", "Super produit 6", 12f, "shoes-img9.png"));
-
-        return "redirect:store";
-    }*/
-
-
     @Autowired
     private ProductService productService;
     @Autowired
@@ -88,7 +75,7 @@ public class StoreController {
 
         ArrayList<Category> categories = categoryService.getAll();
         model.addAttribute("product", new Product());
-        model.addAttribute("categories", categories);
+        model.addAttribute("listCategories", categories);
         return "add-product";
     }
 

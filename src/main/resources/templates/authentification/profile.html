@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/components :: head('Your profile')"></head>
+<!-- body -->
+<body class="main-layout">
+<!-- header section start -->
+<div th:replace="fragments/components :: menu"></div>
+<!-- New Arrivals section start -->
+<!-- Source https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial -->
+<div class="container text-center">
+    <h3 class="new_text">Your profile</h3>
+</div>
+<!-- New Arrivals section end -->
+<div class="container">
+    <div class="user-profile">
+        <div class="user-field">
+            <b>Username: </b><span th:text="${user.getUsername()}"></span>
+        </div>
+        <div class="user-field">
+            <b>Role: </b><span th:text="${user.getRole()}"></span>
+        </div>
+    </div>
+</div>
+
+<!-- section footer start -->
+<div th:replace="fragments/components :: footer"></div>
+<div th:replace="fragments/components :: copyright"></div>
+<div th:replace="fragments/components :: scripts"></div>
+</body>
+</html>

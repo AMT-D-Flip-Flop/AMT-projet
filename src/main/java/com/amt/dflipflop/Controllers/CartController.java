@@ -10,33 +10,40 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
 
 @Controller
 public class CartController {
 
 
-    @Autowired
-    private CartService cartService;
+    private final CartService cartService;
+
+    private final ProductService productService;
+
+    private final ProductSelectionService selectionService;
 
     @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private ProductSelectionService selectionService;
+    public CartController(CartService cartService, ProductService productService, ProductSelectionService selectionService){
+        this.cartService = cartService;
+        this.productService = productService;
+        this.selectionService = selectionService;
+    }
 
     /**
      * Displays the user's cart
      * @return the cart page
      */
     @GetMapping("/cart")
-    public String displayCart(Model model) {
-        if(cartService.getAll().size() == 0){
-            Cart newcart = new Cart();
-            cartService.save(newcart);
-        }
-        Cart cart = cartService.getAll().get(0);
-        model.addAttribute("cart", cart);
+    public String displayCart(Model model, HttpServletRequest req) {
+        HttpSession session = req.getSession(true);
+        Integer userId =  (Integer) session.getAttribute("id");
+        Cart userCart = cartService.getUserCart(userId);
+        if(userCart == null)
+            return "redirect:/login";
+        model.addAttribute("cart", userCart);
         return "cart";
     }
 
@@ -45,13 +52,10 @@ public class CartController {
      * @return the cart page
      */
     @GetMapping("/cart/empty")
-    public String emptyCart(Model model) {
-        Cart userCart = cartService.getAll().get(0);
-        for ( ProductSelection sel : userCart.getSelections()){
-            selectionService.delete(sel);
-        }
-        userCart.empty();
-        cartService.save(userCart);
+    public String emptyCart(HttpServletRequest req) {
+        HttpSession session = req.getSession(true);
+        Integer userId =  (Integer) session.getAttribute("id");
+        cartService.emptyUserCart(userId);
         return "redirect:/cart";
     }
 
@@ -62,20 +66,12 @@ public class CartController {
      * @throws IOException If fails to write the cart
      */
     @PostMapping(path="/cart")
-    public String saveCart (@ModelAttribute Cart cart) throws IOException {
-
-        Cart userCart = cartService.getAll().get(0);
-        Integer index = 0;
-        for (ProductSelection sel: userCart.getSelections()){
-            if(cart.getSelections().get(index).getQuantity() == 0){
-                selectionService.delete(sel);
-            }
-            else{
-                sel.setQuantity(cart.getSelections().get(index).getQuantity());
-            }
-            index++;
-            selectionService.save(sel);
-        }
+    public String saveCart (@ModelAttribute Cart cart, HttpServletRequest req) throws IOException {
+        HttpSession session = req.getSession(true);
+        Integer userId =  (Integer) session.getAttribute("id");
+        Cart userCart = cartService.updateCart(cart, userId);
+        if(userCart == null)
+            return "redirect:/login";
         return "redirect:/cart";
     }
 
@@ -87,26 +83,12 @@ public class CartController {
      * @throws IOException
      */
     @PostMapping(path="/cart/add")
-    public String addProduct (Integer productId, Integer quantity) throws IOException {
-        // Sanity check
-        if(quantity < 1)
-            quantity = 1;
-
-        // Let's check if we already have a selection for that product
-        Cart userCart = cartService.getAll().get(0);
-        for ( ProductSelection sel : userCart.getSelections()){
-            if(sel.getProduct().getId() == productId){
-                sel.setQuantity(sel.getQuantity() + quantity);
-                cartService.save(userCart);
-                return "redirect:/store/product/" + productId;
-            }
-        }
-        ProductSelection newSel = new ProductSelection();
-        newSel.setProduct(productService.get(productId));
-        newSel.setQuantity(quantity);
-        selectionService.save(newSel);
-        userCart.addSelection(newSel);
-        cartService.save(userCart);
+    public String addProduct (Integer productId, Integer quantity, HttpServletRequest req) {
+        HttpSession session = req.getSession(true);
+        Integer userId =  (Integer) session.getAttribute("id");
+        if(userId == null)
+            return "redirect:/login";
+        Cart userCart = cartService.addProduct(productId, quantity, userId);
         return "redirect:/store/product/" + productId;
     }
 
@@ -117,17 +99,10 @@ public class CartController {
      * @throws IOException
      */
     @GetMapping(path="/cart/remove/{id}")
-    public String removeProduct (@PathVariable("id") Integer productId) throws IOException {
-        Cart userCart = cartService.getAll().get(0);
-
-        for ( ProductSelection sel : userCart.getSelections()){
-            if(sel.getProduct().getId() == productId){
-                selectionService.delete(sel);
-            }
-            userCart.getSelections().remove(sel);
-            cartService.save(userCart);
-            return "redirect:/cart";
-        }
+    public String removeProduct (@PathVariable("id") Integer productId, HttpServletRequest req) throws IOException {
+        HttpSession session = req.getSession(true);
+        Integer userId =  (Integer) session.getAttribute("id");
+        Cart userCart = cartService.removeProduct(productId, userId);
         return "redirect:/cart";
     }
 }

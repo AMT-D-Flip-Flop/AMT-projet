@@ -50,11 +50,15 @@
                         <div class="navbar-nav">
                             <a class="nav-item nav-link" href="/">Home</a>
                             <a class="nav-item nav-link" href="/store">Store</a>
-                            <a class="nav-item nav-link" href="/login">Login</a>
+                            <div sec:authorize="!isAuthenticated()">
+                                <a class="nav-item nav-link" href="/login">Login</a>
+                                <a class="nav-item nav-link" href="/register">Register</a>
+                            </div>
                             <div sec:authorize="isAuthenticated()">
+                                <a class="nav-item nav-link" href="/profile">Profile</a>
                                 <a class="nav-item nav-link" href="/logout">logout</a>
                             </div>
-                            <a class="nav-item nav-link" href="/register">Register</a>
+
                             <a class="nav-item nav-link last" href="/cart"><img src="images/shop_icon.png"></a>
                         </div>
                     </div>
@@ -180,6 +184,16 @@
 
         });
     </script>
+</div>
+<div th:fragment="message_display">
+    <br/>
+    <h1 th:if="${success}" th:text="${success}" style="color: green"></h1>
+    <h1 th:if="${error}" th:text="${'Error : ' + error}" style="color: red"></h1>
+</div>
+<div th:fragment="error_display">
+    <div th:if="${error}" >
+        <h1 th:each="e : ${error}" th:text="${'Error : ' + e}" style="color: red"></h1>
+    </div>
 </div>
 </body>
 </html>

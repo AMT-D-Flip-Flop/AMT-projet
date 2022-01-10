@@ -1,4 +1,4 @@
-package security;
+package security.archive;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;

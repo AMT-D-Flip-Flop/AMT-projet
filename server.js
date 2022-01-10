@@ -12,7 +12,7 @@
 
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 8081;
 //var  bodyParser = require('body-parser');
 var bodyParser = require('body-parser')
 class User{
@@ -46,6 +46,9 @@ app.get('/', (req, res) => {
 })*/
 const jwt = require('jsonwebtoken');
 
+userAdmin = "dflipflop";
+userRole= "admin"
+
 app.post('/auth/login', jsonParser, function (
     req, res) {
     token = ""
@@ -56,20 +59,21 @@ app.post('/auth/login', jsonParser, function (
 
 
         user = {
-            "account": {
+            role: userRole,
+            /*"account": {
                 "id": 0,
-                "username": "string",
-                "role": "string"
-            }
+                "username": userAdmin,
+                "role": userRole
+            }*/
         }
-        const token = jwt.sign(user, 'secret',{ algorithm: 'HS256'});
+        const token = jwt.sign(user, 'secret',{ algorithm: 'HS256',  expiresIn: '24h', subject: userAdmin } );
         console.log("succs", token)
         send = {
             "token": token,
             "account": {
                 "id": 0,
-                "username": "string",
-                "role": "string"
+                "username": userAdmin,
+                "role": userRole
             }
         }
     } else {
@@ -84,9 +88,16 @@ app.post('/accounts/register', jsonParser, function (
     req, res) {
     console.log(req.body)
     users.push(req.body)
-
+    /*res.json({
+        "error":[
+            {
+                "test" : "test"
+            }
+        ]
+    })*/
     res.json({
         "username": req.body.username,
+        "id": 0,
         "role": "admin"
     })
 })

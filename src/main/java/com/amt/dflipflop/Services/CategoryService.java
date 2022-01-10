@@ -1,14 +1,15 @@
 package com.amt.dflipflop.Services;
 
 import com.amt.dflipflop.Entities.Category;
-import com.amt.dflipflop.Entities.Product;
 import com.amt.dflipflop.Repositories.CategoryRepository;
-import com.amt.dflipflop.Services.ProductService;
+import com.amt.dflipflop.Repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -17,29 +18,19 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
 
     public ArrayList<Category> getAll() {
-
-        Iterable<Category> it = categoryRepository.findAll();
-
-        ArrayList<Category> categories = new ArrayList<Category>();
-        it.forEach(categories::add);
-
-        return categories;
+        return categoryRepository.findAll();
     }
 
     public ArrayList<Category> getNonEmpty() {
-        ArrayList<Category> categories = new ArrayList<>();
-        ArrayList<Product> products = productService.getAll();
-        for(Product product : products){
-            Category cat = product.getCategory();
-            if(cat  != null && !categories.contains(cat)){
-                categories.add(cat);
-            }
+        ArrayList<Set<Category>> categoriesLists = productRepository.getCategories();
+        HashSet<Category> categoriesNonEmpty = new HashSet<>();
+        for(Set<Category> cats : categoriesLists){
+            categoriesNonEmpty.addAll(cats);
         }
-
-        return categories;
+        return new ArrayList<Category>(categoriesNonEmpty);
     }
 
     public Category get(Integer id) {
@@ -56,12 +47,12 @@ public class CategoryService {
     }
 
     public boolean categoryExists(String name) {
-        ArrayList<Category> categories = getAll();
-        for( Category cat : categories){
-            if (cat.getName().equals(name))
-                return true;
-        }
-        return false;
+        return categoryRepository.existsCategoryByName(name);
+    }
+
+    public boolean isCategoryEmpty(Integer id){
+        Category cat = this.get(id);
+        return (productRepository.countByCategoriesContains(cat) == 0);
     }
 
     public Long count() {

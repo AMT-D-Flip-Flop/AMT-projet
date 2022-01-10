@@ -1,5 +1,7 @@
 package com.amt.dflipflop.Entities;
 
+import com.amt.dflipflop.Entities.authentification.User;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +12,14 @@ import java.util.List;
 public class Cart {
 
     public Cart(){
+        // Add user
+        this.userId = 0;
+        this.selections = new ArrayList<ProductSelection>();
+        this.submitted = false;
+    }
+    public Cart(Integer userId){
     // Add user
-
+        this.userId = userId;
         this.selections = new ArrayList<ProductSelection>();
         this.submitted = false;
     }
@@ -22,6 +30,8 @@ public class Cart {
     private Integer id;
 
     private boolean submitted;
+
+    private Integer userId;
 
     @OneToMany
     @JoinColumn(name = "selection_id")
@@ -41,6 +51,10 @@ public class Cart {
 
     public Integer getId(){
         return this.id;
+    }
+
+    public Integer getUserId(){
+        return this.userId;
     }
 
     public List<ProductSelection> getSelections() {

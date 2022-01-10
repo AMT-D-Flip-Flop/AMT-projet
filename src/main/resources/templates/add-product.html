@@ -37,13 +37,11 @@
             </div>
             <div class="form-group">
                 <label for="pCategory">Category</label>
-                <select name="cat" th:field="*{category}" hidden id="pCategory">
-                    <option th:each="cat : ${categories}"
-                            th:value="${cat.getId()}"
-                            th:text="${cat.getName()}"
-                    >
-                    </option>
-                </select>
+                <!-- source: https://github.com/jmiguelsamper/thymeleafexamples-selectmultiple-->
+                <div th:each="cat: ${listCategories}">
+                    <input type="checkbox" th:id="${{cat}}" th:value="${{cat}}" th:field="*{categories}" />
+                    <label th:for="${{cat}}" th:text="${cat.getName()}"></label>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
