@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 // CRUD refers Create, Read, Update, Delete
 
 public interface ProductRepository extends CrudRepository<Product, Integer> {
-    Product findByDescription(String desc);
+    Product findByName(String desc);
 
     // Exemples
     // Product findByCategory(Category category);

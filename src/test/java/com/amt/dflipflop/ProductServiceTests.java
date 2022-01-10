@@ -40,7 +40,7 @@ public class ProductServiceTests {
 
     @Test
     public void testExample() throws Exception {
-        Product p = new Product("Honda", "Civic", (float) 12.5, "2");
+        Product p = new Product("Honda", "Civic", (float) 12.5, "2", 5);
         //Product savedUser = this.productService.insert(p);
         Product savedUser = this.productRepository.save(p);
 

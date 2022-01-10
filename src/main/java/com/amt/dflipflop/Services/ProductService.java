@@ -73,10 +73,10 @@ public class ProductService {
     /**
      * Check if a description is already in the database
      *
-     * @param desc The description to check
-     * @return The product with the description if already stored, null otherwise
+     * @param name The name to check
+     * @return The product with the name if already stored, null otherwise
      */
-    public Product descriptionExist(String desc) {
-        return productRepository.findByDescription(desc);
+    public Product nameExist(String name) {
+        return productRepository.findByName(name);
     }
 }

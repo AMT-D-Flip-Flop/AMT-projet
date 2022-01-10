@@ -14,11 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.nio.file.*;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -103,7 +104,8 @@ public class StoreController {
     @PostMapping(path="/store/add-product") // Map ONLY POST Requests
     public String addNewProduct (@ModelAttribute("product") Product product, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes redirectAttrs, Model model) throws IOException {
 
-        final String uploadDir = "src/main/resources/static/images";
+        final String uploadDir = "src/main/resources/static/images"; //Dev
+        //final String uploadDir = "/opt/tomcat/webapps/img"; //Prod
         final String defaultImgName = "default.png";
         String fileName;
 
@@ -113,12 +115,12 @@ public class StoreController {
             return "add-product";
         }
 
-        // Check for duplicate description
-        Product duplicateProdDescription = productService.descriptionExist(product.getDescription());
+        // Check for duplicate name
+        Product duplicateProdDescription = productService.nameExist(product.getName());
         if (duplicateProdDescription != null){
             ArrayList<Category> categories = categoryService.getAll();
             model.addAttribute("categories", categories);
-            model.addAttribute("status", "The product \"" + duplicateProdDescription.getName() + "\" has the same description");
+            model.addAttribute("status", "A product with the name \"" + duplicateProdDescription.getName() + "\" already exist");
             return "add-product";
         }
 

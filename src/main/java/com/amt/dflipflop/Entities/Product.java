@@ -8,11 +8,12 @@ public class Product {
     // needed for SpringBoot Hibernate to create objects
     public Product() {}
 
-    public Product(String name, String description, Float price,  String imageName){
+    public Product(String name, String description, Float price,  String imageName, Integer quantity){
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageName = imageName;
+        this.quantity = quantity;
     }
 
     @Id
@@ -29,6 +30,8 @@ public class Product {
     private Float price;
 
     private String imageName;
+
+    private Integer quantity;
 
     public Integer getId() {
         return id;
@@ -66,7 +69,7 @@ public class Product {
     }
     public String getImageRelativePath() {
         return "images/" + imageName;
-    }
+    } //images pour dev
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
@@ -78,4 +81,10 @@ public class Product {
         this.price = price;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
