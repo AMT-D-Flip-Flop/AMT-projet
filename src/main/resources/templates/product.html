@@ -24,7 +24,8 @@
 
             <td>
 
-            <span th:if="${product.quantity > 0}">
+            <span th:if="${product.quantity > 0 &&  product.price > 0}">
+
             <form method="POST" action="/cart/add" class="consectetur_text">
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="productId" name="productId"
@@ -34,9 +35,14 @@
                 </div>
                 <button type="submit" class="buy_text">Add to cart</button>
             </form>
+
                 </span>
 
-                <span th:unless="${product.quantity > 0}">
+                <span th:if="${product.price <= 0 || product.price == null}">
+                    Avaible soon
+                    </span>
+
+                <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
                     Indisponible
                     </span>
             </td>
