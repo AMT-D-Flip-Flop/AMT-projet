@@ -101,9 +101,6 @@ public class UserController {
             session.setAttribute("id", authenticatedUser.getId());
             session.setAttribute("user", authenticatedUser);
 
-        /*.orElseThrow(()->
-                new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));*/
-            // model.addAttribute("user", u);
             Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
 
             // expires in 7 days
@@ -125,7 +122,6 @@ public class UserController {
             return "redirect:/login";
         }
         catch(Exception e){
-            // We don't want to show those errors to the user
             return "redirect:/login";
         }
 

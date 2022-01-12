@@ -17,10 +17,6 @@ import java.util.HashMap;
 
 
 public interface TokenProvider {
-    Token generateAccessToken(String subject) throws IOException;
-
-    Token generateRefreshToken(String subject) throws IOException;
-
     String getUsernameFromToken(String token) throws Exception;
 
     HashMap getAccountFromToken(String token) throws Exception;
