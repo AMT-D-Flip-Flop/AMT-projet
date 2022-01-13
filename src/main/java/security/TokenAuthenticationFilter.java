@@ -16,6 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -27,6 +29,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private AuthenticationManager authenticationManager = new AuthenticationManager() {
@@ -46,23 +50,22 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtToken(httpServletRequest, true);
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                tokenProvider.getAccountFromToken(jwt);
+                tokenProvider.setAccountFromToken(jwt);
+                String role = tokenProvider.getRoleFromToken(jwt);
                 String username = tokenProvider.getUsernameFromToken(jwt);
                 UserJson userJsonResponse = new UserJson();
                 userJsonResponse.setUsername(username);
+                List<GrantedAuthority> authorities
+                        = new ArrayList<>();
+                authorities.add( new SimpleGrantedAuthority(role));
                 UsernamePasswordAuthenticationToken authRequest
-                        = new UsernamePasswordAuthenticationToken(username, "");
+                        = new UsernamePasswordAuthenticationToken(username, "", authorities );
 
                 // Authenticate the user
                 Authentication authentication = authenticationManager.authenticate(authRequest);
                 SecurityContext securityContext = SecurityContextHolder.getContext();
 
                 securityContext.setAuthentication(authentication);
-                //userJsonResponse.setAccountPublic();
-                //UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-                //UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                //authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                //SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 SecurityContextHolder.getContext().setAuthentication(null);
             }

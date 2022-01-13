@@ -8,10 +8,10 @@
 
 package security;
 
+import com.amt.dflipflop.Constants;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -37,8 +36,6 @@ public class TokenProviderImpl implements TokenProvider {
     //@Value(value = "${mode.choice}")
 
     //Define the key choice for jwt
-    //private String mode = "prod";
-    private String mode = "noProd";
     private String jwtfileNamePath = "/opt/tomcat/webapps/zone_secret/jwt.txt";
 
 
@@ -63,7 +60,7 @@ public class TokenProviderImpl implements TokenProvider {
     }
 
     void generateKey() throws IOException {
-        if (!keyGenerated && mode.equals("prod")) {
+        if (!keyGenerated && Constants.mode.equals("prod")) {
             logger.error("reade file");
             tokenSecret = readLine(jwtfileNamePath);
             keyGenerated = true;
@@ -72,7 +69,7 @@ public class TokenProviderImpl implements TokenProvider {
 
 
     @Override
-    public HashMap getAccountFromToken(String token) throws Exception {
+    public HashMap setAccountFromToken(String token) throws Exception {
         generateKey();
         Claims claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(Charset.forName("UTF-8"))).parseClaimsJws(token).getBody();
         logger.error(claims.toString());
@@ -92,6 +89,14 @@ public class TokenProviderImpl implements TokenProvider {
             throw new Exception("User hashamp is null");
         }
         return (String) lp.get("username");
+    }
+
+    @Override
+    public String getRoleFromToken(String token) throws Exception {
+        if (lp == null) {
+            throw new Exception("User hashamp is null");
+        }
+        return (String) lp.get("role");
     }
 
 
