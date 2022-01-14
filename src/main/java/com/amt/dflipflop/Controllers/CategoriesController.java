@@ -23,6 +23,8 @@ import java.util.Map;
 import static com.amt.dflipflop.Constants.*;
 
 @Controller
+// DPE - Dans l'idée de découpler la logique métier de la méthode d'accès, votre controlleur fait encore trop de choses.
+// Imaginez transformer ce controller en RestController
 public class CategoriesController {
 
     @Autowired

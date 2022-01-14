@@ -10,7 +10,8 @@ package com.amt.dflipflop.Entities.authentification;
 import java.io.Serializable;
 import java.util.List;
 
-
+// DPE - https://www.baeldung.com/java-dto-pattern, je pense que vous cherchez à faire ça
+// Utilisez lombok pour les getters/setters ca va vous alléger ce genre d'objets
 public class UserJson implements Serializable {
 
     private String token;

@@ -19,6 +19,7 @@ import java.io.IOException;
 public class CartController {
 
 
+    // DPE - Vous connaissez lombok ? @AllArgsConstructor
     private final CartService cartService;
 
     private final ProductService productService;
@@ -38,8 +39,12 @@ public class CartController {
      */
     @GetMapping("/cart")
     public String displayCart(Model model, HttpServletRequest req) {
+
+        //DPE - Même si c'est que deux ligne vous avez de la duplication dans toutes vos fonctions
         HttpSession session = req.getSession(true);
         Integer userId =  (Integer) session.getAttribute("id");
+
+
         Cart userCart = cartService.getUserCart(userId);
         if(userCart == null)
             return "redirect:/login";

@@ -68,6 +68,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContext securityContext = SecurityContextHolder.getContext();
 
                 securityContext.setAuthentication(authentication);
+
+                //DPE - Si ce code est plus utilisé, supprimez le.
                 //userJsonResponse.setAccountPublic();
                 //UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                 //UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
