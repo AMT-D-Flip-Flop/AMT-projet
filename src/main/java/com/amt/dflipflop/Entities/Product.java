@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.amt.dflipflop.Constants.IS_PROD;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Product {
 
@@ -86,8 +88,12 @@ public class Product {
         return imageName;
     }
     public String getImageRelativePath() {
-        return "images/" + imageName;
-    } //images pour dev
+        if (IS_PROD){
+            return "img/" + imageName;
+        } else {
+            return "images/" + imageName;
+        }
+    }
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }

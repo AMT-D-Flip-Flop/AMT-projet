@@ -14,13 +14,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.nio.file.*;
 import java.util.Map;
+
+import static com.amt.dflipflop.Constants.IS_PROD;
 
 @Controller
 public class StoreController {
@@ -90,9 +90,13 @@ public class StoreController {
      */
     @PostMapping(path="/store/add-product") // Map ONLY POST Requests
     public String addNewProduct (@ModelAttribute("product") Product product, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes redirectAttrs, Model model) throws IOException {
+        final String uploadDir;
+        if (IS_PROD){
+            uploadDir = "/opt/tomcat/webapps/img"; //Prod
+        } else {
+            uploadDir = "src/main/resources/static/images"; //Dev
+        }
 
-        final String uploadDir = "src/main/resources/static/images"; //Dev
-        //final String uploadDir = "/opt/tomcat/webapps/img"; //Prod
         final String defaultImgName = "default.png";
         String fileName;
 
