@@ -11,18 +11,27 @@
 
 package com.amt.dflipflop.Entities.authentification;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
 
     private UserJson user;
+    List<GrantedAuthority> authorities
+            = new ArrayList<>();
+
 
     public CustomUserDetails(UserJson user) {
         this.user = user;
+        if(user.getAccount() != null){
+            authorities.add(new SimpleGrantedAuthority(user.getAccount().getRole()));
+        }
     }
 
     public boolean userIsNull() {
@@ -31,7 +40,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
