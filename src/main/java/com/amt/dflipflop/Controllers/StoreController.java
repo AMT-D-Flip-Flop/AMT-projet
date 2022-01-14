@@ -110,7 +110,7 @@ public class StoreController {
         Product duplicateProdDescription = productService.nameExist(product.getName());
         if (duplicateProdDescription != null){
             ArrayList<Category> categories = categoryService.getAll();
-            model.addAttribute("categories", categories);
+            model.addAttribute("listCategories", categories);
             model.addAttribute("status", "A product with the name \"" + duplicateProdDescription.getName() + "\" already exist");
             return "add-product";
         }
