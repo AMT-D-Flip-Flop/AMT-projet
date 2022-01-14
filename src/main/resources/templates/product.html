@@ -12,19 +12,52 @@
             <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}"/>
         </div>
         <div class="col-md">
-            <h1 class="new_text"><strong th:text="${product.getName()}"></strong><hr/></h1>
-            <div th:if="${product.getCategories().size() > 0}" th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
+            <h1 class="new_text"><strong th:text="${product.getName()}"></strong>
+                <hr/>
+            </h1>
+            <div th:if="${product.getCategories().size() > 0}"
+                 th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
             <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
-            <div class="number_text"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
-            <form method="POST" action="/cart/add"  class="consectetur_text">
+            <div class="number_text"><strong>CHF <span style="color: #0a0506"
+                                                       th:text="${product.getPrice()}"></span></strong></div>
+
+            <td>
+
+            <span th:if="${product.quantity > 0 &&  product.price > 0}">
+
+            <form method="POST" action="/cart/add" class="consectetur_text">
                 <div class="form-group">
-                    <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
+                    <input type="hidden" class="form-control" id="productId" name="productId"
+                           th:value="${product.getId()}">
                     <label>Quantité</label>
                     <input type="number" class="form-control" id="quantity" name="quantity" value="1">
                 </div>
                 <button type="submit" class="buy_text">Add to cart</button>
             </form>
+
+                </span>
+
+                <span th:if="${product.price <= 0 || product.price == null}">
+                    Avaible soon
+                    </span>
+
+                <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
+                    Indisponible
+                    </span>
+            </td>
+
+            <td>
+
+<div></div>
+                <!-- DETERMINER COMMENT ON TEST LE ROLE UTILISATEU !!! -->
+                 <span th:if="${0 == 0}">
+
+            <button class="btn btn-primary"><a style="color: white" th:href="'/store/gest-product/' + ${product.getId()}">Manage article</a></button>
+
+                     </span>
+            </td>
+
         </div>
 
     </div>
