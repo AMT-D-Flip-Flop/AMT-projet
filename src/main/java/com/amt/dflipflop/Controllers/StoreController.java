@@ -141,4 +141,83 @@ public class StoreController {
         return "redirect:/store/add-product";
     }
 
+    /**
+     *
+     * @param productId Id of product get from url
+     * @param model Representation of the elements for the view
+     * @param request Data from redirections
+     * @return The page manage-product
+     */
+    @GetMapping("/store/manage-product/{id}")
+    public String getGestProduct(@PathVariable("id") Integer productId, Model model, HttpServletRequest request) {
+        // Info user after product modification
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        String status;
+        if (inputFlashMap != null) {
+            status = (String) inputFlashMap.get("message");
+            model.addAttribute("status", status);
+        }
+
+        Product product = productService.get(productId);
+        if (product == null) {
+            return "redirect:/store/product";
+        }
+
+        ArrayList<Category> categories = categoryService.getAll();
+        model.addAttribute("product", product);
+        model.addAttribute("listCategories", categories);
+
+        return "manage-product";
+    }
+
+    @PostMapping(path="/store/manage-product/{id}") // Map ONLY POST Requests
+    public String manageProduct (@ModelAttribute("product") Product product, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes redirectAttrs, Model model) throws IOException {
+        final String uploadDir;
+        if (IS_PROD){
+            uploadDir = "/opt/tomcat/webapps/img"; //Prod
+        } else {
+            uploadDir = "src/main/resources/static/images"; //Dev
+        }
+
+        String fileName;
+
+        // Error in the format of the data submitted
+        if(result.hasErrors()){
+            redirectAttrs.addFlashAttribute("message", "Something went wrong, please retry");
+            return "add-product";
+        }
+
+        // Check for duplicate name
+        Product duplicateProdDescription = productService.nameExistAndDifferFromId(product.getName(), product.getId());
+        if (duplicateProdDescription != null){
+            ArrayList<Category> categories = categoryService.getAll();
+            model.addAttribute("listCategories", categories);
+            model.addAttribute("status", "A product with the name \"" + duplicateProdDescription.getName() + "\" already exist");
+            return "manage-product";
+        }
+
+        // Process if an image has been selected
+        if (!multipartFile.isEmpty()) {
+            //Get name of the img uploaded
+            fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            //Import name of image
+            product.setImageName(fileName);
+
+            //Upload and write img
+            try (InputStream inputStream = multipartFile.getInputStream()) {
+                Path filePath = Paths.get(uploadDir).resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ioe) {
+                throw new IOException("Could not save image file: " + fileName, ioe);
+            }
+        }
+
+        // Update the product via a product service
+        productService.update(product);
+
+        redirectAttrs.addFlashAttribute("message", "Success");
+
+        return "redirect:/store/manage-product/" + product.getId();
+    }
+
 }
