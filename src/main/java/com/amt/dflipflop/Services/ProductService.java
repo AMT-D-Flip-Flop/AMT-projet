@@ -67,4 +67,8 @@ public class ProductService {
     public Product nameExist(String name) {
         return productRepository.findByName(name);
     }
+
+    public Product nameExistAndDifferFromId(String name, int id) {
+        return productRepository.findByNameAndIdIsNot(name, id);
+    }
 }

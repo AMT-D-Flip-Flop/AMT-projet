@@ -14,7 +14,7 @@
     <h1 th:if="${status} and ${status} != 'Success'" th:text="${'An error has occured : ' + status}" style="color: red">
     </h1>
     <div class="container">
-        <form method="POST" action="#" th:action="@{/store/manage-product}" th:object="${product}" enctype="multipart/form-data" class="consectetur_text">
+        <form method="POST" action="#" th:action="@{/store/manage-product/{id}(id=${product.getId()})}" th:object="${product}" enctype="multipart/form-data" class="consectetur_text">
             <div class="form-group">
                 <label for="pName">Product Name</label>
                 <input type="text" class="form-control" id="pName" th:field="*{name}" th:value="${product.getName()}" required>
@@ -33,8 +33,9 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr;">
                 <div class="form-group">
-                    <label style="display: block">Product Picture</label>
+                    <label for="pPictureShow" style="display: block">Product Picture</label>
                     <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}" width="250" >
+                    <input type="text" class="form-control" id="pPictureShow" th:field="*{imageName}" th:value="${product.getImageName()}" hidden>
                 </div>
                 <div class="form-group" style="float: left">
                     <label for="pPicture">Change product picture</label>
