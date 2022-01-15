@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head('Product')"></head>
 <!-- body -->
 <body class="main-layout">
@@ -18,11 +18,14 @@
             <div th:if="${product.getCategories().size() > 0}"
                  th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
-            <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
-            <div class="number_text"><strong>CHF <span style="color: #0a0506"
-                                                       th:text="${product.getPrice()}"></span></strong></div>
+
 
             <td>
+                                           <span th:if="${product.quantity > 0 &&  product.price > 0}">
+
+                <div class="number_text"><strong>CHF <span style="color: #0a0506"
+                                                           th:text="${product.getPrice()}"></span></strong></div>
+                </span>
 
             <span th:if="${product.quantity > 0 &&  product.price > 0}">
 
@@ -39,24 +42,24 @@
                 </span>
 
                 <span th:if="${product.price <= 0 || product.price == null}">
-                    Avaible soon
+                    <body> <th:block th:text="Indisponible"></th:block> </body>
                     </span>
 
                 <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
-                    Indisponible
+                    <body> <th:block th:text="'Indisponible  ( ' + ${product.getPrice()} + 'CHF)'"></th:block> </body>
                     </span>
             </td>
 
-            <td>
 
-<div></div>
-                <!-- DETERMINER COMMENT ON TEST LE ROLE UTILISATEU !!! -->
-                 <span th:if="${0 == 0}">
+            <div></div>
 
-            <button class="btn btn-primary"><a style="color: white" th:href="'/store/manage-product/' + ${product.getId()}">Manage article</a></button>
 
-                     </span>
-            </td>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <button class="btn btn-primary"><a style="color: white"
+                                                   th:href="'/store/manage-product/' + ${product.getId()}">Manage
+                    article</a></button>
+            </div>
+
 
         </div>
 
