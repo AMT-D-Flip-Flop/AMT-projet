@@ -57,4 +57,18 @@ public class ProductService {
         product.removeCategory(category);
         productRepository.save(product);
     }
+
+    /**
+     * Check if the name is already in the database
+     *
+     * @param name The name to check
+     * @return The product with the name if already stored, null otherwise
+     */
+    public Product nameExist(String name) {
+        return productRepository.findByName(name);
+    }
+
+    public Product nameExistAndDifferFromId(String name, int id) {
+        return productRepository.findByNameAndIdIsNot(name, id);
+    }
 }

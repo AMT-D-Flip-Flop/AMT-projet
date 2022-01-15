@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.amt.dflipflop.Constants.IS_PROD;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class Product {
 
     // needed for SpringBoot Hibernate to create objects
     public Product() {}
 
-    public Product(String name, String description, Float price,  String imageName){
+    public Product(String name, String description, Float price,  String imageName, Integer quantity){
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageName = imageName;
+        this.quantity = quantity;
     }
 
     @Id
@@ -32,6 +35,8 @@ public class Product {
     private Float price;
 
     private String imageName;
+
+    private Integer quantity;
 
     public Integer getId() {
         return id;
@@ -83,7 +88,11 @@ public class Product {
         return imageName;
     }
     public String getImageRelativePath() {
-        return "images/" + imageName;
+        if (IS_PROD){
+            return "img/" + imageName;
+        } else {
+            return "images/" + imageName;
+        }
     }
     public void setImageName(String imageName) {
         this.imageName = imageName;
@@ -96,4 +105,10 @@ public class Product {
         this.price = price;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
