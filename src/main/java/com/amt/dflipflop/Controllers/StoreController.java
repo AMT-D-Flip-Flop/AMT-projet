@@ -141,4 +141,26 @@ public class StoreController {
         return "redirect:/store/add-product";
     }
 
+    @GetMapping("/store/manage-product/{id}")
+    public String getGestProduct(@PathVariable("id") Integer productId, Model model, HttpServletRequest request) {
+        // Info user after product modification
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        String status;
+        if (inputFlashMap != null) {
+            status = (String) inputFlashMap.get("message");
+            model.addAttribute("status", status);
+        }
+
+        Product product = productService.get(productId);
+        if (product == null) {
+            return "redirect:/store/product";
+        }
+
+        ArrayList<Category> categories = categoryService.getAll();
+        model.addAttribute("product", product);
+        model.addAttribute("listCategories", categories);
+
+        return "manage-product";
+    }
+
 }
