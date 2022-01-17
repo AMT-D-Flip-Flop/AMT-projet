@@ -17,10 +17,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
-            // use the credentials
+            // use the credentialsauthentication
             // and authenticate against the third-party system
             return new UsernamePasswordAuthenticationToken(
-                    name, password, new ArrayList<>());
+                    name, password, authentication.getAuthorities());
 
     }
 

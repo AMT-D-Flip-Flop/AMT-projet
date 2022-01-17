@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head('Product')"></head>
 <!-- body -->
 <body class="main-layout">
@@ -9,22 +9,58 @@
 <div class="container">
     <div class="product_presentation row">
         <div class="col-md">
-            <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}"/>
+            <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}">
         </div>
         <div class="col-md">
-            <h1 class="new_text"><strong th:text="${product.getName()}"></strong><hr/></h1>
-            <div th:if="${product.getCategories().size() > 0}" th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
+            <h1 class="new_text"><strong th:text="${product.getName()}"></strong>
+                <hr/>
+            </h1>
+            <div th:if="${product.getCategories().size() > 0}"
+                 th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
-            <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
-            <div class="number_text"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
-            <form method="POST" action="/cart/add"  class="consectetur_text">
+
+
+            <td>
+                                           <span th:if="${product.quantity > 0 &&  product.price > 0}">
+
+                <div class="number_text"><strong>CHF <span style="color: #0a0506"
+                                                           th:text="${product.getPrice()}"></span></strong></div>
+                </span>
+
+            <span th:if="${product.quantity > 0 &&  product.price > 0}">
+
+            <form method="POST" action="/cart/add" class="consectetur_text">
                 <div class="form-group">
-                    <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
+                    <input type="hidden" class="form-control" id="productId" name="productId"
+                           th:value="${product.getId()}">
                     <label>Quantité</label>
                     <input type="number" class="form-control" id="quantity" name="quantity" value="1">
                 </div>
                 <button type="submit" class="buy_text">Add to cart</button>
             </form>
+
+                </span>
+
+                <span th:if="${product.price <= 0 || product.price == null}">
+                    <body> <th:block th:text="Indisponible"></th:block> </body>
+                    </span>
+
+                <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
+                    <body> <th:block th:text="'Indisponible  ( ' + ${product.getPrice()} + 'CHF)'"></th:block> </body>
+                    </span>
+            </td>
+
+
+            <div></div>
+
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <button class="btn btn-primary"><a style="color: white"
+                                                   th:href="'/store/manage-product/' + ${product.getId()}">Manage
+                    article</a></button>
+            </div>
+
+
         </div>
 
     </div>

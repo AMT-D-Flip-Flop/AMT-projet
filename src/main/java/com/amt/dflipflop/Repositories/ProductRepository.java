@@ -16,6 +16,13 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
     Integer countByCategoriesContains(Category cat);
     ArrayList<Product> getProductsByCategoriesContains(Category cat);
 
+    Product findByName(String name);
+    Product findByNameAndIdIsNot(String name, int id);
+
+    // Exemples
+    // Product findByCategory(Category category);
+    // ArrayList<Product> findAllByDescriptionContains(String desc);
+
     @Query("SELECT p.categories FROM Product p")
     ArrayList<Set<Category>> getCategories();
 }

@@ -38,6 +38,6 @@ public class StoreControllerTests {
 
     @Test
     public void shouldDisplayAddProduct() throws Exception {
-        this.mockMvc.perform(get("/store/add-product")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/store/add-product")).andDo(print()).andExpect(status().isForbidden());
     }
 }
