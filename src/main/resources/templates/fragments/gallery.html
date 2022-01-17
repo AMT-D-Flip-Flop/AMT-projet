@@ -15,7 +15,7 @@
 
 
                             <span th:if="${prod.price <= 0 || prod.price == null}">
-                    <body> <th:block th:text="Available soon"></th:block> </body>
+                    <body> <th:block th:text="Indisponible"></th:block> </body>
                     </span>
 
                             <span th:if="${(prod.quantity <= 0 || prod.quantity == null) && prod.price > 0}">
