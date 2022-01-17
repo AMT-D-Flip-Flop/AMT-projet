@@ -88,11 +88,7 @@ public class Product {
         return imageName;
     }
     public String getImageRelativePath() {
-        if (IS_PROD){
-            return "img/" + imageName;
-        } else {
-            return "images/" + imageName;
-        }
+        return imageName;
     }
     public void setImageName(String imageName) {
         this.imageName = imageName;

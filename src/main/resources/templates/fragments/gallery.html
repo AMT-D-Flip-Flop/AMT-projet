@@ -6,7 +6,7 @@
                 <a th:href="'store/product/' + ${prod.getId()}">
                     <div class="best_shoes">
                         <p class="item_name" th:text="${prod.getName()}"></p>
-                        <div class="item_icon"><img th:src="${prod.getImageRelativePath()}" th:alt="${prod.getName()}"/></div>
+                        <div class="item_icon"><img th:src="'https://s3.eu-central-1.amazonaws.com/dflipflop.diduno.education/' + ${prod.getImageRelativePath()}" th:alt="${prod.getName()}"/></div>
                         <td>
                                            <span th:if="${prod.quantity > 0 &&  prod.getPrice() > 0}">
 
