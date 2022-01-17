@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/components :: head('Product')"></head>
 <!-- body -->
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
+<div th:replace="fragments/components :: message_display"></div>
+
 <div class="container">
     <div class="product_presentation row">
         <div class="col-md">
-            <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}"/>
+            <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}">
         </div>
         <div class="col-md">
             <h1 class="section_title"><strong th:text="${product.getName()}"></strong><hr/></h1>
@@ -16,6 +18,7 @@
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
             <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
             <div class="favorite_price"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
+            <span th:if="${product.quantity > 0 &&  product.price > 0}">
             <form method="POST" action="/cart/add"  class="section_text">
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
@@ -26,6 +29,28 @@
                     </div>
                 </div>
             </form>
+
+                </span>
+
+                <span th:if="${product.price <= 0 || product.price == null}">
+                    <body> <th:block th:text="Indisponible"></th:block> </body>
+                    </span>
+
+                <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
+                    <body> <th:block th:text="'Indisponible  ( ' + ${product.getPrice()} + 'CHF)'"></th:block> </body>
+                    </span>
+            </td>
+
+
+            <div></div>
+
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <button class="btn btn-primary"><a style="color: white"
+                                                   th:href="'/store/manage-product/' + ${product.getId()}">Manage
+                    article</a></button>
+            </div>
+
             <div th:replace="fragments/components :: message_display"></div>
         </div>
     </div>

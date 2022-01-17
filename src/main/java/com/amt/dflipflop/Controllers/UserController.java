@@ -39,6 +39,7 @@ public class UserController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private AuthenticationManager authenticationManager = new AuthenticationManager() {
         CustomAuthenticationProvider cp = new CustomAuthenticationProvider();
+
         @Override
         public Authentication authenticate(Authentication authentication) throws AuthenticationException {
             return cp.authenticate(authentication);
@@ -81,13 +82,14 @@ public class UserController {
     @PostMapping("/login")
     //@ResponseBody
     public String login(User user, HttpServletResponse response, HttpServletRequest req, RedirectAttributes redirectAttrs) {
-        try{
+        try {
             authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
             if (authenticatedUser.userIsNull()) {
                 return "authentification/signin_form";
             }
             UsernamePasswordAuthenticationToken authRequest
-                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(),
+                    authenticatedUser.getAuthorities());
 
             // Authenticate the user
             Authentication authentication = authenticationManager.authenticate(authRequest);
@@ -101,9 +103,6 @@ public class UserController {
             session.setAttribute("id", authenticatedUser.getId());
             session.setAttribute("user", authenticatedUser);
 
-        /*.orElseThrow(()->
-                new HttpServerErrorException(HttpStatus.FORBIDDEN, "Login Failed"));*/
-            // model.addAttribute("user", u);
             Cookie cookie = new Cookie("bearer", this.authenticatedUser.getToken());
 
             // expires in 7 days
@@ -119,13 +118,10 @@ public class UserController {
 
             // return response entity
             // return new ResponseEntity<>(this.authenticatedUser.getToken(), HttpStatus.OK);
-        }
-        catch (CustomUserDetailsService.AuthManagerException e){
+        } catch (CustomUserDetailsService.AuthManagerException e) {
             redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
             return "redirect:/login";
-        }
-        catch(Exception e){
-            // We don't want to show those errors to the user
+        } catch (Exception e) {
             return "redirect:/login";
         }
 
@@ -148,7 +144,6 @@ public class UserController {
     }
 
 
-
     @GetMapping("/register_success")
     public String showRegisterSuccessForm() {
         return "authentification/register_success";
@@ -161,28 +156,21 @@ public class UserController {
      */
     @PostMapping("/process_register")
     public String processRegister(User user, RedirectAttributes redirectAttrs) {
-        /*
-         */
-        //
-        //String createPersonUrl = "http://mobile.iict.ch/api/json";");
-        try{
+        try {
             CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
             return "redirect:/login";
-        }
-        catch (CustomUserDetailsService.AuthManagerException e){
+        } catch (CustomUserDetailsService.AuthManagerException e) {
             redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
             return "redirect:/register";
-        }
-        catch(Exception e){ //OK
+        } catch (Exception e) { //OK
             System.out.println(e.toString());
             return "redirect:/register";
         }
-
     }
 
     @GetMapping("/profile")
-    public String profilePage(Model model){
-        if(authenticatedUser == null){
+    public String profilePage(Model model) {
+        if (authenticatedUser == null) {
             return "redirect:/login";
         }
 
