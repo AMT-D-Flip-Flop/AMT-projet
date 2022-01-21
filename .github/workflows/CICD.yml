@@ -28,6 +28,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '8'
+
       #Set up Maven cache
       - name: Cache Maven packages
         #This action allows caching dependencies and build outputs to improve workflow execution time.
@@ -38,7 +39,12 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       #Run Tests
       - name: Run Tests
-        run: mvn -B -DAWS_KEY=${{ secrets.AWS_KEY }} -DAWS_SECRET=${{ secrets.AWS_SECRET }} -DAWS_REGION=${{ secrets.AWS_REGION }} -DAWS_BUCKET=${{ secrets.AWS_BUCKET }} test
+        run: mvn -B test
+        env:
+          AWS_KEY: ${{ secrets.AWS_KEY }}
+          AWS_SECRET: ${{ secrets.AWS_SECRET }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
 
   build:
     #Depends on tests
