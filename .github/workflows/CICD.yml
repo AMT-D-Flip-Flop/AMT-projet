@@ -28,12 +28,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '8'
-      - name: Define AWS variables
-        run: |
-            echo "AWS_KEY=${{ secrets.AWS_KEY }} >> $GITHUB_ENV"
-            echo "AWS_SECRET=${{ secrets.AWS_SECRET }} >> $GITHUB_ENV"
-            echo "AWS_REGION=${{ secrets.AWS_REGION }} >> $GITHUB_ENV"
-            echo "AWS_BUCKET=${{ secrets.AWS_BUCKET }} >> $GITHUB_ENV"
       #Set up Maven cache
       - name: Cache Maven packages
         #This action allows caching dependencies and build outputs to improve workflow execution time.
@@ -44,7 +38,12 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       #Run Tests
       - name: Run Tests
-        run: mvn -B test
+        run: |
+        echo "AWS_KEY=${{ secrets.AWS_KEY }} >> $GITHUB_ENV"
+        echo "AWS_SECRET=${{ secrets.AWS_SECRET }} >> $GITHUB_ENV"
+        echo "AWS_REGION=${{ secrets.AWS_REGION }} >> $GITHUB_ENV"
+        echo "AWS_BUCKET=${{ secrets.AWS_BUCKET }} >> $GITHUB_ENV"
+        mvn -B test
 
   build:
     #Depends on tests
