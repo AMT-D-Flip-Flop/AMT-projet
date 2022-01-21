@@ -24,13 +24,21 @@ public class AmazonConfig {
 
     @Bean
     public AmazonS3 s3client() {
+        if(awsKey != null){
+            BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKey, awsSecret);
+            AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
+                    .withRegion(Regions.fromName(region))
+                    .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                    .build();
 
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKey, awsSecret);
-        AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
-                .withRegion(Regions.fromName(region))
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .build();
+            return amazonS3Client;
+        }
+        else{
+            AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
+                    .build();
 
-        return amazonS3Client;
+            return amazonS3Client;
+        }
+
     }
 }
