@@ -16,19 +16,5 @@ public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void shouldDisplayUserOrders() throws Exception {
-        this.mockMvc.perform(get("/user/orders")).andDo(print()).andExpect(status().isOk());
-    }
-
-    @Test
-    public void shouldDisplayUserAddresses() throws Exception {
-        this.mockMvc.perform(get("/user/addresses")).andDo(print()).andExpect(status().isOk());
-    }
-
-    @Test
-    public void shouldDisplayUserAddAddress() throws Exception {
-        this.mockMvc.perform(get("/user/add-address")).andDo(print()).andExpect(status().isOk());
-    }
 
 }

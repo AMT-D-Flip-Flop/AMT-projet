@@ -1,6 +1,7 @@
 package com.amt.dflipflop.Entities;
 
 import com.amt.dflipflop.Entities.authentification.User;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,19 +28,16 @@ public class Cart {
     // Use the user as the id
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
     private Integer id;
 
-    private boolean submitted;
-
-    private Integer userId;
+    @Getter private boolean submitted;
+    @Getter private Integer userId;
 
     @OneToMany
     @JoinColumn(name = "selection_id")
+    @Getter
     private List<ProductSelection> selections;
-
-    public boolean isSubmitted() {
-        return submitted;
-    }
 
     public float getTotal(){
         float total = 0.f;
@@ -47,18 +45,6 @@ public class Cart {
             total += selection.getProduct().getPrice() * selection.getQuantity();
         }
         return total;
-    }
-
-    public Integer getId(){
-        return this.id;
-    }
-
-    public Integer getUserId(){
-        return this.userId;
-    }
-
-    public List<ProductSelection> getSelections() {
-        return this.selections;
     }
 
     public void empty(){

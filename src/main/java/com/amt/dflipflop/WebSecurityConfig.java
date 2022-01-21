@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()// Disable csrf for now
                 .authorizeRequests()
-                    .antMatchers("/store/add-product", "/store/manage-product/*").hasRole("ADMIN")
+                    .antMatchers("/store/add-product", "/store/manage-product/*", "/categories").hasRole("ADMIN")
                     .antMatchers("/**", "/css/*", "/js/*", "/images/*", "/demo/*").permitAll()
                     .and()
                     .addFilterBefore(new TokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

@@ -5,53 +5,50 @@
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
-<div th:replace="fragments/components :: message_display"></div>
+
 <div class="container">
     <div class="product_presentation row">
         <div class="col-md">
             <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}">
         </div>
         <div class="col-md">
-            <h1 class="new_text"><strong th:text="${product.getName()}"></strong>
-                <hr/>
-            </h1>
-            <div th:if="${product.getCategories().size() > 0}"
-                 th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
+            <h1 class="section_title"><strong th:text="${product.getName()}"></strong><hr/></h1>
+
+            <div th:if="${product.getCategories().size() > 0}" th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
+
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
 
 
-            <td>
-                                           <span th:if="${product.quantity > 0 &&  product.price > 0}">
-
-                <div class="number_text"><strong>CHF <span style="color: #0a0506"
-                                                           th:text="${product.getPrice()}"></span></strong></div>
-                </span>
-
+            <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
             <span th:if="${product.quantity > 0 &&  product.price > 0}">
+                <div class="favorite_price"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
+            </span>
+            <span th:if="${product.quantity > 0 &&  product.price == 0}">
+                <div class="number_text"><strong> <span style="color: #0a0506" th:text="'Gratuit'"></span></strong></div>
+            </span>
 
-            <form method="POST" action="/cart/add" class="consectetur_text">
-                <div class="form-group">
-                    <input type="hidden" class="form-control" id="productId" name="productId"
-                           th:value="${product.getId()}">
-                    <label>Quantité</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" value="1">
-                </div>
-                <button type="submit" class="buy_text">Add to cart</button>
-            </form>
+            <span th:if="${product.quantity > 0 &&  product.price >= 0}">
+                <form method="POST" action="/cart/add"  class="section_text">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
+                        <label>Quantity</label>
+                        <div class="add-to-cart">
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                            <button type="submit" class="btn btn-dark">Add to cart</button>
+                        </div>
+                    </div>
+                </form>
+            </span>
 
-                </span>
-
-                <span th:if="${product.price <= 0 || product.price == null}">
-                    <body> <th:block th:text="Indisponible"></th:block> </body>
+                <span th:if="${product.price == null}">
+                    <body> <th:block th:text="'Available soon'"></th:block> </body>
                     </span>
-
                 <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
                     <body> <th:block th:text="'Indisponible  ( ' + ${product.getPrice()} + 'CHF)'"></th:block> </body>
                     </span>
-            </td>
-
-
-            <div></div>
+                <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price == 0}">
+                    <body> <th:block th:text="'Indisponible (Gratuit)'"></th:block> </body>
+                    </span>
 
 
             <div sec:authorize="hasRole('ROLE_ADMIN')">
@@ -60,9 +57,8 @@
                     article</a></button>
             </div>
 
-
+            <div th:replace="fragments/components :: message_display"></div>
         </div>
-
     </div>
 </div>
 

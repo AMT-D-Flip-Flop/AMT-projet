@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/components :: head('login')"></head>
+<head th:replace="fragments/components :: head('Login')"></head>
 <!-- body -->
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
 <!-- content start -->
 
-<div class="collection_text">User login - Sign In</div>
+<div class="collection_text">Sign In</div>
 <div class="collection_section layout_padding">
     <div th:replace="fragments/components :: error_display"></div>
     <div class="container">
+        <div th:replace="fragments/components :: message_display"></div>
         <form th:action="@{/login}" th:object="${user}"
               method="post" style="max-width: 600px; margin: 0 auto;">
-            <div class="m-3">
+            <div class="m-3 section_text">
                 <div class="form-group row">
-                    <label class="col-4 col-form-label">username</label>
+                    <label class="col-4 col-form-label">Username</label>
                     <div class="col-8">
                         <input type="text" th:field="*{username}" class="form-control" required />
                     </div>
@@ -28,7 +29,7 @@
                     </div>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <button type="submit" class="btn main_bt right_part">Log In</button>
                 </div>
             </div>
         </form>
