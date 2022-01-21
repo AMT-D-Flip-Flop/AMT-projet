@@ -5,38 +5,28 @@
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
-<div th:replace="fragments/components :: message_display"></div>
+
 <div class="container">
     <div class="product_presentation row">
         <div class="col-md">
             <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}">
         </div>
         <div class="col-md">
-            <h1 class="new_text"><strong th:text="${product.getName()}"></strong>
-                <hr/>
-            </h1>
-            <div th:if="${product.getCategories().size() > 0}"
-                 th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
+            <h1 class="section_title"><strong th:text="${product.getName()}"></strong><hr/></h1>
+            <div th:if="${product.getCategories().size() > 0}" th:text="'Categories:' + ${product.getCategoriesNames()}"></div>
             <h2 class="presentation_text" th:text="${product.getDescription()}"></h2><br/>
-
-
-            <td>
-                                           <span th:if="${product.quantity > 0 &&  product.price > 0}">
-
-                <div class="number_text"><strong>CHF <span style="color: #0a0506"
-                                                           th:text="${product.getPrice()}"></span></strong></div>
-                </span>
-
+            <div class="sale_text"><span style="color: #0a0506;" th:txt="${product.getName()}"></span></div>
+            <div class="favorite_price"><strong>CHF <span style="color: #0a0506" th:text="${product.getPrice()}"></span></strong></div>
             <span th:if="${product.quantity > 0 &&  product.price > 0}">
-
-            <form method="POST" action="/cart/add" class="consectetur_text">
+            <form method="POST" action="/cart/add"  class="section_text">
                 <div class="form-group">
-                    <input type="hidden" class="form-control" id="productId" name="productId"
-                           th:value="${product.getId()}">
-                    <label>Quantité</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                    <input type="hidden" class="form-control" id="productId" name="productId" th:value="${product.getId()}">
+                    <label>Quantity</label>
+                    <div class="add-to-cart">
+                        <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                        <button type="submit" class="btn btn-dark">Add to cart</button>
+                    </div>
                 </div>
-                <button type="submit" class="buy_text">Add to cart</button>
             </form>
 
                 </span>
@@ -60,9 +50,8 @@
                     article</a></button>
             </div>
 
-
+            <div th:replace="fragments/components :: message_display"></div>
         </div>
-
     </div>
 </div>
 

@@ -18,6 +18,6 @@ public class CheckoutControllerTests {
 
     @Test
     public void shouldDisplayCheckout() throws Exception {
-        this.mockMvc.perform(get("/checkout")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/checkout")).andExpect(status().isOk());
     }
 }

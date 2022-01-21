@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,6 +57,22 @@ public class ProductService {
     public void removeCategoryFromProduct(Product product, Category category) {
         product.removeCategory(category);
         productRepository.save(product);
+    }
+
+    public List<Product> getLast3Products(){
+        if (count() >= 3) {
+            return getAll().subList(0, 3);
+        }
+        return getAll();
+    }
+
+    public Product getRandom(){
+        List<Product> all = getAll();
+        if(!all.isEmpty()){
+            int chosen = (int)(Math.random() * (all.size() - 1));
+            return all.get(chosen);
+        }
+        return null;
     }
 
     /**
