@@ -38,12 +38,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       #Run Tests
       - name: Run Tests
-        run: |
-        echo "AWS_KEY=${{ secrets.AWS_KEY }} >> $GITHUB_ENV"
-        echo "AWS_SECRET=${{ secrets.AWS_SECRET }} >> $GITHUB_ENV"
-        echo "AWS_REGION=${{ secrets.AWS_REGION }} >> $GITHUB_ENV"
-        echo "AWS_BUCKET=${{ secrets.AWS_BUCKET }} >> $GITHUB_ENV"
-        mvn -B test
+        run: mvn -B -DAWS_KEY=${{ secrets.AWS_KEY }} -DAWS_SECRET=${{ secrets.AWS_SECRET }} -DAWS_REGION=${{ secrets.AWS_REGION }} -DAWS_BUCKET=${{ secrets.AWS_BUCKET }} test
 
   build:
     #Depends on tests
