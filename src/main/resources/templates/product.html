@@ -27,7 +27,13 @@
                                                            th:text="${product.getPrice()}"></span></strong></div>
                 </span>
 
-            <span th:if="${product.quantity > 0 &&  product.price > 0}">
+                <span th:if="${product.quantity > 0 &&  product.price == 0}">
+
+                <div class="number_text"><strong> <span style="color: #0a0506"
+                                                           th:text="'Gratuit'"></span></strong></div>
+                </span>
+
+            <span th:if="${product.quantity > 0 &&  product.price >= 0}">
 
             <form method="POST" action="/cart/add" class="consectetur_text">
                 <div class="form-group">
@@ -41,15 +47,17 @@
 
                 </span>
 
-                <span th:if="${product.price <= 0 || product.price == null}">
-                    <body> <th:block th:text="Indisponible"></th:block> </body>
+                <span th:if="${product.price == null}">
+                    <body> <th:block th:text="'Available soon'"></th:block> </body>
                     </span>
-
                 <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price > 0}">
                     <body> <th:block th:text="'Indisponible  ( ' + ${product.getPrice()} + 'CHF)'"></th:block> </body>
                     </span>
-            </td>
+                <span th:if="${(product.quantity <= 0 || product.quantity == null) && product.price == 0}">
+                    <body> <th:block th:text="'Indisponible (Gratuit)'"></th:block> </body>
+                    </span>
 
+            </td>
 
             <div></div>
 
