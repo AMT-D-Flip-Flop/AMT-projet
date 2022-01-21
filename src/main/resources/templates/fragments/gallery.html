@@ -1,4 +1,3 @@
-
 <div th:fragment="list_items(products)">
     <div class="container">
         <div class="row">
@@ -6,21 +5,32 @@
                 <a th:href="'store/product/' + ${prod.getId()}">
                     <div class="product_list">
                         <p class="item_name" th:text="${prod.getName()}"></p>
-                        <div class="item_icon"><img th:src="${prod.getImageRelativePath()}" th:alt="${prod.getName()}"/></div>
+                        <div class="item_icon"><img th:src="${prod.getImageRelativePath()}" th:alt="${prod.getName()}"/>
+                        </div>
                         <td>
                                            <span th:if="${prod.quantity > 0 &&  prod.getPrice() > 0}">
 
                 <div class="price"><span style="color: #ff4e5b;" th:text="${prod.getPrice()}"></span> CHF</div>
                 </span>
+                            <span th:if="${prod.quantity > 0 &&  prod.getPrice() == 0}">
+
+                <div class="price"><span style="color: #ff4e5b;" th:text="Gratuit"></span> </div>
+                </span>
 
 
-                            <span th:if="${prod.price <= 0 || prod.price == null}">
-                    <body> <th:block th:text="Indisponible"></th:block> </body>
+                            <span th:if="${prod.price == null}">
+                    <body> <th:block th:text="'Available Soon'"></th:block> </body>
                     </span>
 
                             <span th:if="${(prod.quantity <= 0 || prod.quantity == null) && prod.price > 0}">
                                 <body> <th:block th:text="'Indisponible  ( ' + ${prod.getPrice()} + 'CHF)'"></th:block> </body>
                     </span>
+
+                            <span th:if="${(prod.quantity <= 0 || prod.quantity == null) && prod.price == 0}">
+                                <body> <th:block th:text="'Indisponible  (Gratuit)'"></th:block> </body>
+                    </span>
+
+
                         </td>
                     </div>
                 </a>
