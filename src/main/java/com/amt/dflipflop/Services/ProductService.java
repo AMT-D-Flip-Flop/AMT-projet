@@ -60,13 +60,19 @@ public class ProductService {
     }
 
     public List<Product> getLast3Products(){
-        return getAll().subList(0, 3);
+        if (count() >= 3) {
+            return getAll().subList(0, 3);
+        }
+        return getAll();
     }
 
     public Product getRandom(){
         List<Product> all = getAll();
-        int chosen = (int)(Math.random() * (all.size() - 1));
-        return all.get(chosen);
+        if(!all.isEmpty()){
+            int chosen = (int)(Math.random() * (all.size() - 1));
+            return all.get(chosen);
+        }
+        return null;
     }
 
     /**
