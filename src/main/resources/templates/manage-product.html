@@ -14,7 +14,7 @@
     <h1 th:if="${status} and ${status} != 'Success'" th:text="${'An error has occured : ' + status}" style="color: red">
     </h1>
     <div class="container">
-        <form method="POST" action="#" th:action="@{/store/manage-product/{id}(id=${product.getId()})}" th:object="${product}" enctype="multipart/form-data" class="consectetur_text">
+        <form method="POST" action="#" th:action="@{/store/manage-product/{id}(id=${product.getId()})}" th:object="${product}" enctype="multipart/form-data" class="section_text">
             <div class="form-group">
                 <label for="pName">Product Name</label>
                 <input type="text" class="form-control" id="pName" th:field="*{name}" th:value="${product.getName()}" required>

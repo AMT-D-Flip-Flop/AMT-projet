@@ -48,6 +48,10 @@ public class ProductSelectionService {
         return true;
     }
 
+    public ArrayList<Product> getTop2Products(){
+        return productSelectionRepository.getDistinctTop2();
+    }
+
     public Long count() {
         return productSelectionRepository.count();
     }
