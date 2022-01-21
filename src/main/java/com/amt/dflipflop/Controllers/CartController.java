@@ -5,6 +5,7 @@ import com.amt.dflipflop.Entities.ProductSelection;
 import com.amt.dflipflop.Services.CartService;
 import com.amt.dflipflop.Services.ProductSelectionService;
 import com.amt.dflipflop.Services.ProductService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,20 +21,16 @@ import static com.amt.dflipflop.Constants.SUCCESS_MSG_KEY;
 
 
 @Controller
+@AllArgsConstructor
 public class CartController {
 
-
     private final CartService cartService;
-
     private final ProductService productService;
-
     private final ProductSelectionService selectionService;
 
-    @Autowired
-    public CartController(CartService cartService, ProductService productService, ProductSelectionService selectionService){
-        this.cartService = cartService;
-        this.productService = productService;
-        this.selectionService = selectionService;
+    private Integer getSessionId(HttpServletRequest req){
+        HttpSession session = req.getSession(true);
+        return (Integer) session.getAttribute("id");
     }
 
     /**
@@ -42,8 +39,9 @@ public class CartController {
      */
     @GetMapping("/cart")
     public String displayCart(Model model, HttpServletRequest req, RedirectAttributes redirectAttrs) {
-        HttpSession session = req.getSession(true);
-        Integer userId =  (Integer) session.getAttribute("id");
+
+        Integer userId =  getSessionId(req);
+
         Cart userCart = cartService.getUserCart(userId);
         if(userCart == null)
             return "redirect:/login";
@@ -65,8 +63,7 @@ public class CartController {
      */
     @GetMapping("/cart/empty")
     public String emptyCart(HttpServletRequest req, RedirectAttributes redirectAttrs) {
-        HttpSession session = req.getSession(true);
-        Integer userId =  (Integer) session.getAttribute("id");
+        Integer userId =  getSessionId(req);
         cartService.emptyUserCart(userId);
         redirectAttrs.addFlashAttribute(SUCCESS_MSG_KEY, "Cart cleared");
         return "redirect:/cart";
@@ -80,8 +77,7 @@ public class CartController {
      */
     @PostMapping(path="/cart")
     public String saveCart (@ModelAttribute Cart cart, HttpServletRequest req, RedirectAttributes redirectAttrs) throws IOException {
-        HttpSession session = req.getSession(true);
-        Integer userId =  (Integer) session.getAttribute("id");
+        Integer userId =  getSessionId(req);
         Cart userCart = cartService.updateCart(cart, userId);
         if(userCart == null)
             return "redirect:/login";
@@ -100,8 +96,7 @@ public class CartController {
      */
     @PostMapping(path="/cart/add")
     public String addProduct (Integer productId, Integer quantity, HttpServletRequest req, RedirectAttributes redirectAttrs) {
-        HttpSession session = req.getSession(true);
-        Integer userId =  (Integer) session.getAttribute("id");
+        Integer userId =  getSessionId(req);
         if(userId == null)
             return "redirect:/login";
         Cart userCart = cartService.addProduct(productId, quantity, userId);
@@ -117,8 +112,7 @@ public class CartController {
      */
     @GetMapping(path="/cart/remove/{id}")
     public String removeProduct (@PathVariable("id") Integer productId, HttpServletRequest req) throws IOException {
-        HttpSession session = req.getSession(true);
-        Integer userId =  (Integer) session.getAttribute("id");
+        Integer userId =  getSessionId(req);
         Cart userCart = cartService.removeProduct(productId, userId);
         return "redirect:/cart";
     }
