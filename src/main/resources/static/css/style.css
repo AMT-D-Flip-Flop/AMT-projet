@@ -471,7 +471,7 @@ body {
 .gallery_section {
     width: 100%;
     float: left;
-    background-color: #ff4e5b;
+    background-color: #db5660;
     height: auto;
     padding: 50px;
 
@@ -592,7 +592,7 @@ a:hover {
     color: #ffffff;
     text-align: center;
     padding: 10px 0;
-    background-color: #ff4e5b;
+    background-color: #db5660;
 }
 
 .copyright a {

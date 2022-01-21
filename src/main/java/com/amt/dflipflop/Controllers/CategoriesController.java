@@ -23,7 +23,6 @@ import java.util.Map;
 import static com.amt.dflipflop.Constants.*;
 
 @Controller
-// DPE - Dans l'idée de découpler la logique métier de la méthode d'accès, votre controlleur fait encore trop de choses.
 // Imaginez transformer ce controller en RestController
 public class CategoriesController {
 
@@ -126,16 +125,7 @@ public class CategoriesController {
             return "redirect:/store";
         }
 
-        HashSet<Category> categories = new HashSet<Category>();
-        for(int id: categoriesId){
-            Category category = categoryService.get(id);
-            if(category != null){
-                categories.add(category);
-            }
-        }
-
-        product.setCategories(categories);
-        productService.update(product);
+        productService.updateProductCategories(product, categoriesId);
 
         redirectAttrs.addFlashAttribute(SUCCESS_MSG_KEY, "Updated the product successfully");
         return "redirect:/store/product/" + productId;

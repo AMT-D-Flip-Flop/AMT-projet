@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,5 +90,17 @@ public class ProductService {
         return productRepository.findByNameAndIdIsNot(name, id);
     }
 
+    public void updateProductCategories(Product product, List<Integer> categoriesId){
+        HashSet<Category> categories = new HashSet<Category>();
+        for(int id: categoriesId){
+            Category category = categoryService.get(id);
+            if(category != null){
+                categories.add(category);
+            }
+        }
 
+        product.setCategories(categories);
+        update(product);
+
+    }
 }
