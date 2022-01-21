@@ -12,13 +12,12 @@ package security;
 
 import com.amt.dflipflop.Entities.authentification.CustomAuthenticationProvider;
 import com.amt.dflipflop.Entities.authentification.UserJson;
-import com.amt.dflipflop.Services.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -30,38 +29,37 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-    //Value("${authentication-test.auth.accessTokenCookieName}")
     private AuthenticationManager authenticationManager = new AuthenticationManager() {
         CustomAuthenticationProvider cp = new CustomAuthenticationProvider();
+
         @Override
         public Authentication authenticate(Authentication authentication) throws AuthenticationException {
             return cp.authenticate(authentication);
         }
     };
-    private String accessTokenCookieName ="bearer";
-
-    @Value("${authentication-test.auth.refreshTokenCookieName}")
-    private String refreshTokenCookieName;
-
-
+    private String accessTokenCookieName = "bearer";
     private TokenProvider tokenProvider = new TokenProviderImpl();
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJwtToken(httpServletRequest, true);
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                tokenProvider.getAccountFromToken(jwt);
+                tokenProvider.setAccountFromToken(jwt);
+                String role = tokenProvider.getRoleFromToken(jwt);
                 String username = tokenProvider.getUsernameFromToken(jwt);
                 UserJson userJsonResponse = new UserJson();
                 userJsonResponse.setUsername(username);
+                List<GrantedAuthority> authorities
+                        = new ArrayList<>();
+                authorities.add( new SimpleGrantedAuthority(role));
                 UsernamePasswordAuthenticationToken authRequest
-                        = new UsernamePasswordAuthenticationToken(username, "");
+                        = new UsernamePasswordAuthenticationToken(username, "", authorities );
 
                 // Authenticate the user
                 Authentication authentication = authenticationManager.authenticate(authRequest);
@@ -69,13 +67,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
                 securityContext.setAuthentication(authentication);
 
-                //DPE - Si ce code est plus utilisé, supprimez le.
-                //userJsonResponse.setAccountPublic();
-                //UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-                //UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                //authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                //SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else{
+            } else {
                 SecurityContextHolder.getContext().setAuthentication(null);
             }
         } catch (Exception ex) {
@@ -100,7 +92,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
 
         //Null check necessery because boucle for each
-        if(cookies != null){
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (accessTokenCookieName.equals(cookie.getName())) {
                     String accessToken = cookie.getValue();

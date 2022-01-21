@@ -57,7 +57,7 @@ public class CartServiceTests {
 
     @Test
     public void testSelectionAdd() throws Exception {
-        Product p = new Product("Honda", "Civic", (float) 12.5, "2");
+        Product p = new Product("Honda", "Civic", (float) 12.5, "2", 5);
         productRepository.save(p);
 
         Cart cart = new Cart(0);

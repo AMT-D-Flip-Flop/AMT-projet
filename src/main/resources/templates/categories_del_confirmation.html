@@ -5,24 +5,33 @@
 <body class="main-layout">
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
-<div class="collection_text" th:text="'Category ' + ${category.getName()} + '\''"></div>
-<div class="product_presentation">
-    <h1 style="color: red">Warning, this category contains:</h1>
-    <div th:each="prod : ${products}" class="col-sm-4">
-        <a th:href="'store/product/' + ${prod.getId()}">
-            <p class="item_name" th:text="${prod.getName()}"></p>
-        </a>
+<div class="collection_text" th:text="'Category \'' + ${category.getName()} + '\''"></div>
+<div class="collection_section section">
+    <div class="container">
+        <h1 class="section_title"><i class="fas fa-exclamation-circle"></i> This category is not empty </h1>
+        <div class="product_list warning_list">
+        <div th:each="prod : ${products}" class="col-sm-4">
+            <a th:href="'store/product/' + ${prod.getId()}">
+                <p class="item_name" th:text="${prod.getName()}"></p>
+            </a>
+        </div>
+        </div>
     </div>
 </div>
 
 
-<div class="collection_section layout_padding product_presentation">
-        <a href="/categories">
-            <button class="btn btn-info">Cancel</button>
-        </a>
-        <a th:href="'/categories/remove?id=' + ${category.getId()} + '&confirm=true'">
-            <button class="btn btn-danger">Continue</button>
-        </a>
+<div class="collection_section layout_padding">
+    <div class="container">
+        <p class="centered">If you continue, these items will updated. Products which have no category left will not appear in the store anymore.</p>
+        <div class="right_part">
+            <a href="/categories">
+                <button class="btn btn-danger">Cancel</button>
+            </a>
+            <a th:href="'/categories/remove?id=' + ${category.getId()} + '&confirm=true'">
+                <button class="btn btn-info">Continue</button>
+            </a>
+        </div>
+    </div>
 </div>
 
 

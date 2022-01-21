@@ -21,8 +21,8 @@ services:
             MYSQL_USER: flipflop
             MYSQL_PASSWORD: FlipFlop1234
             MYSQL_ROOT_PASSWORD: FlipFlop1234
-        #volumes:
-            #- ../data/scripts:/docker-entrypoint-initdb.d
+        volumes:
+            - ./init:/docker-entrypoint-initdb.d
         networks:
             - default
             

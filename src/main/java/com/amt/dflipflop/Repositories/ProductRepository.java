@@ -12,9 +12,19 @@ import java.util.Set;
 // CRUD refers Create, Read, Update, Delete
 
 public interface ProductRepository extends CrudRepository<Product, Integer> {
+
+    @Query("SELECT p FROM Product p ORDER BY p.id desc") // show the latest products first
     ArrayList<Product> findAll();
+
     Integer countByCategoriesContains(Category cat);
     ArrayList<Product> getProductsByCategoriesContains(Category cat);
+
+    Product findByName(String name);
+    Product findByNameAndIdIsNot(String name, int id);
+
+    // Exemples
+    // Product findByCategory(Category category);
+    // ArrayList<Product> findAllByDescriptionContains(String desc);
 
     @Query("SELECT p.categories FROM Product p")
     ArrayList<Set<Category>> getCategories();
