@@ -63,6 +63,10 @@ public class Product {
     }
 
     public String getImageRelativePath() {
-        return imageName;
+        if (IS_PROD){
+            return "img/" + imageName;
+        } else {
+            return "images/" + imageName;
+        }
     }
 }
