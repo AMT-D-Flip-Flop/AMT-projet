@@ -9,7 +9,7 @@
 <div class="container">
     <div class="product_presentation row">
         <div class="col-md">
-            <img th:src="${product.getImageRelativePath()}" th:alt="${product.getName()}">
+            <img th:src="'https://s3.eu-central-1.amazonaws.com/dflipflop.diduno.education/' + ${product.getImageRelativePath()}" th:alt="${product.getName()}">
         </div>
         <div class="col-md">
             <h1 class="section_title"><strong th:text="${product.getName()}"></strong><hr/></h1>
