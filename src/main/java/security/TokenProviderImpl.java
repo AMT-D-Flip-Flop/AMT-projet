@@ -28,15 +28,15 @@ import java.util.LinkedHashMap;
 @Service
 public class TokenProviderImpl implements TokenProvider {
     Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    //@Value("${authentication-test.auth.tokenSecret}")
-    private String tokenSecret = "secret";
+
+    private String tokenSecret = Constants.tokenSecretDefault;
 
     private boolean keyGenerated;
 
-    //@Value(value = "${mode.choice}")
+
 
     //Define the key choice for jwt
-    private String jwtfileNamePath = "/opt/tomcat/webapps/zone_secret/jwt.txt";
+    private String jwtfileNamePath = Constants.jwtfileNamePath;
 
 
     private LinkedHashMap lp;
@@ -60,7 +60,7 @@ public class TokenProviderImpl implements TokenProvider {
     }
 
     void generateKey() throws IOException {
-        if (!keyGenerated && Constants.mode.equals("prod")) {
+        if (!keyGenerated && Constants.IS_PROD) {
             logger.error("reade file");
             tokenSecret = readLine(jwtfileNamePath);
             keyGenerated = true;
