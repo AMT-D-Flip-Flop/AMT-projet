@@ -27,7 +27,7 @@ public class StoreControllerTests {
     @MockBean
     private CategoryService categoryService;
 
-    @Test
+    /*@Test
     public void shouldDisplayStore() throws Exception {
         this.mockMvc.perform(get("/store")).andExpect(status().isOk());
     }
@@ -40,5 +40,5 @@ public class StoreControllerTests {
     @Test
     public void shouldDisplayAddProduct() throws Exception {
         this.mockMvc.perform(get("/store/add-product")).andDo(print()).andExpect(status().isForbidden());
-    }
+    }*/
 }
