@@ -28,8 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
-import static com.amt.dflipflop.Constants.ERROR_MSG_KEY;
-import static com.amt.dflipflop.Constants.SUCCESS_MSG_KEY;
+import static com.amt.dflipflop.Constants.*;
 
 
 @Controller
@@ -67,12 +66,17 @@ public class UserController {
         return "add-address";
     }
 
+    @Value("${devServerAuthentication.login}")
+    private String devServerAuthentication;
 
-    @Value("${serverAuthentication.login}")
-    private String serverAuthentication;
+    @Value("${devServerAuthentication.register}")
+    private String devServerAuthenticationRegister;
 
-    @Value("${serverAuthentication.register}")
-    private String serverAuthenticationRegister;
+    @Value("${prodServerAuthentication.login}")
+    private String prodServerAuthentication;
+
+    @Value("${prodServerAuthentication.register}")
+    private String prodServerAuthenticationRegister;
 
     /*
     Source :
@@ -83,7 +87,7 @@ public class UserController {
     //@ResponseBody
     public String login(User user, HttpServletResponse response, HttpServletRequest req, RedirectAttributes redirectAttrs) {
         try {
-            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
+            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), IS_PROD ?  prodServerAuthentication : devServerAuthentication);
             if (authenticatedUser.userIsNull()) {
                 return "authentification/signin_form";
             }
@@ -157,7 +161,7 @@ public class UserController {
     @PostMapping("/process_register")
     public String processRegister(User user, RedirectAttributes redirectAttrs) {
         try {
-            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
+            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), IS_PROD ? prodServerAuthenticationRegister : devServerAuthenticationRegister);
             return "redirect:/login";
         } catch (CustomUserDetailsService.AuthManagerException e) {
             redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);

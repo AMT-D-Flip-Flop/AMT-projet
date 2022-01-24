@@ -88,7 +88,11 @@ public class Product {
         return imageName;
     }
     public String getImageRelativePath() {
-        return imageName;
+        if (IS_PROD){
+            return "https://s3.eu-central-1.amazonaws.com/dflipflop.diduno.education/" + imageName;
+        } else {
+            return "images/" + imageName;
+        }
     }
     public void setImageName(String imageName) {
         this.imageName = imageName;

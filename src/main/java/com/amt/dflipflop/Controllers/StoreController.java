@@ -1,6 +1,7 @@
 package com.amt.dflipflop.Controllers;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amt.dflipflop.Constants;
 import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
 import com.amt.dflipflop.Services.CategoryService;
@@ -132,17 +133,19 @@ public class StoreController {
             product.setImageName(fileName);
 
             //Upload and write img
-            /*
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = Paths.get(uploadDir).resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ioe) {
-                throw new IOException("Could not save image file: " + fileName, ioe);
+            if(IS_PROD){
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(multipartFile.getSize());
+                amazonS3Client.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
             }
-            */
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentLength(multipartFile.getSize());
-            amazonS3Client.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+            else{
+                try (InputStream inputStream = multipartFile.getInputStream()) {
+                    Path filePath = Paths.get(uploadDir).resolve(fileName);
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ioe) {
+                    throw new IOException("Could not save image file: " + fileName, ioe);
+                }
+            }
 
         } else {
             product.setImageName(defaultImgName);
@@ -219,11 +222,18 @@ public class StoreController {
             product.setImageName(fileName);
 
             //Upload and write img
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = Paths.get(uploadDir).resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ioe) {
-                throw new IOException("Could not save image file: " + fileName, ioe);
+            if(IS_PROD){
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(multipartFile.getSize());
+                amazonS3Client.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+            }
+            else{
+                try (InputStream inputStream = multipartFile.getInputStream()) {
+                    Path filePath = Paths.get(uploadDir).resolve(fileName);
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ioe) {
+                    throw new IOException("Could not save image file: " + fileName, ioe);
+                }
             }
         }
 
