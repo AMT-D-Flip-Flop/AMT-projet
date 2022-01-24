@@ -26,7 +26,7 @@
 <form class="form-group" action="/store" method="get">
     <div class="container filter-form">
             <select name="cat" hidden>
-                <option disabled hidden selected>No filter</option>
+                <option hidden selected>No filter</option>
                 <option th:each="cat : ${categories}"
                         th:value="${cat.getId()}"
                         th:text="${cat.getName()}"

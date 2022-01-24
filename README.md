@@ -1,4 +1,11 @@
 # DFlipFlop
+![GitHub](https://img.shields.io/github/license/AMT-D-Flip-Flop/AMT-projet)
+![GitHub repo size](https://img.shields.io/github/repo-size/AMT-D-Flip-Flop/AMT-projet)
+![GitHub issues](https://img.shields.io/github/issues/AMT-D-Flip-Flop/AMT-projet)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/AMT-D-Flip-Flop/AMT-projet)
+[![CICD Pipeline](https://github.com/AMT-D-Flip-Flop/AMT-projet/actions/workflows/CICD.yml/badge.svg?branch=main)](https://github.com/AMT-D-Flip-Flop/AMT-projet/actions/workflows/CICD.yml)
+
+
 
 DFlipFLop est une application e-commerce web qui offre à ses clients une large gamme de produits informatique.
 
@@ -8,26 +15,33 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
 - Java 8
 - Maven
 
-**Déployement**
+**Déploiement**
 - Ubuntu 20.04
 
 ## Installation
 - Cloner le repo
 
-    ``git clone https://github.com/AMT-D-Flip-Flop/AMT-projet``
-
+    ```bash
+    git clone https://github.com/AMT-D-Flip-Flop/AMT-projet
+    ```
 
 - Créer une base de données ainsi qu'un utilisateur avec les droits sur celle-ci
+  - Le dossier *Setup* met à disposition un docker compose permettant d'automatiser cette partie.
 
-
+  
 - Modifier le fichier *src/main/application.properties* avec la base de données et les identifiants de l'utilisateur
 
 
 - Lancer le projet:
+    ```bash
+    ./mvnw spring-boot:run
+    ```
 
-  ``./mvnw spring-boot:run``
 
-## Déployement
+
+- L'application est ensuite accessible à l'adresse http://localhost:8080
+
+## Déploiement
 
 Pour déployer l'application, copiez le script *Setup/server-setup.sh* sur le serveur et suivez la procédure d'installation.
 
@@ -48,7 +62,7 @@ Remplissez la partie username et password avec vos identifiants Tomcat.
 
 Modifiez aussi le fichier pom.xml avec l'adresse de votre serveur (partie build).
 
-Démarrez le deployment:
+Démarrez le déploiement:
 ``
  ./mvnw tomcat7:deploy
 ``
@@ -58,5 +72,5 @@ Rendez vous sur la partie [collaboration](https://github.com/AMT-D-Flip-Flop/AMT
 
 N'oubliez pas de créer des tests en fonction des nouvelles fonctionnalités ajoutées.
 
-## License
+## Licence
 [MIT](https://choosealicense.com/licenses/mit/)
