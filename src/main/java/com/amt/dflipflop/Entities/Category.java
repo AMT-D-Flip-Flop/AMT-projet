@@ -7,36 +7,26 @@
 
 package com.amt.dflipflop.Entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
+@Entity @NoArgsConstructor
 public class Category {
-
-    // needed for SpringBoot Hibernate to create objects
-    public Category() {}
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter @Setter
     private Integer id;
 
+    @Getter @Setter
     private String name;
 
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public String toString() {

@@ -6,11 +6,11 @@
 <!-- header section start -->
 <div th:replace="fragments/components :: menu"></div>
 <!-- content start -->
-<div class="collection_text">Products</div>
-<div class="collection_section layout_padding">
+<div class="collection_text">Store</div>
+<div class="collection_section section">
     <div class="container">
-        <h1 class="new_text"><strong>Our products</strong></h1>
-        <p class="consectetur_text">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+        <h1 class="section_title">Our products</h1>
+        <p class="section_text">Here you can find all our products</p>
     </div>
 
 
@@ -23,16 +23,18 @@
                                        th:href="'/store/add-product'">add product</a></button>
 </div>
 <div th:replace="fragments/components :: message_display"></div>
-<form action="/store" method="get">
-    <select name="cat" hidden>
-        <option disabled hidden selected>Aucune</option>
-        <option th:each="cat : ${categories}"
-                th:value="${cat.getId()}"
-                th:text="${cat.getName()}"
-                th:selected="${cat.getId() == selected}">
-        </option>
-    </select>
-    <button type="submit" class="btn btn-primary">Filter</button>
+<form class="form-group" action="/store" method="get">
+    <div class="container filter-form">
+            <select name="cat" hidden>
+                <option disabled hidden selected>No filter</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.getId()}"
+                        th:text="${cat.getName()}"
+                        th:selected="${cat.getId() == selected}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-dark">Apply</button>
+    </div>
 </form>
 
 <div class="layout_padding gallery_section">
