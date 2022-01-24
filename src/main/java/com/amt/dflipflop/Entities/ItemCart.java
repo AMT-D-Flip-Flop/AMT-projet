@@ -1,12 +1,13 @@
 package com.amt.dflipflop.Entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
+@Entity @NoArgsConstructor
 public class ItemCart {
-
-    // needed for SpringBoot Hibernate to create objects
-    public ItemCart() {}
 
     public ItemCart(Integer qty, Product product){
         this.product = product;
@@ -15,30 +16,14 @@ public class ItemCart {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @Getter @Setter
     private Integer id;
 
+    @Getter @Setter
     private Integer qty;
 
     @OneToOne
+    @Getter
     private Product product;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Product getProduct(){
-        return product;
-    }
-
-    public Integer getQty(){
-        return qty;
-    }
-    public void setQty(Integer qty){
-        this.qty = qty;
-    }
 
 }
