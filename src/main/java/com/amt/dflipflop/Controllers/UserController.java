@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static com.amt.dflipflop.Constants.ERROR_MSG_KEY;
+import static com.amt.dflipflop.Constants.*;
 
 
 @Controller
@@ -39,11 +39,38 @@ public class UserController {
         }
     };
 
-    @Value("${serverAuthentication.login}")
-    private String serverAuthentication;
+    @GetMapping("/user/orders")
+    public String getUserOrders(Model model) {
+        return "orders";
+    }
 
-    @Value("${serverAuthentication.register}")
-    private String serverAuthenticationRegister;
+    @GetMapping("/user/addresses")
+    public String getAddressesPage(Model model) {
+        return "addresses";
+    }
+
+    @GetMapping("/user/add-address")
+    public String getAddAddressPage(Model model) {
+        return "add-address";
+    }
+
+    @PostMapping(path = "/user/add-address") // Map ONLY POST Requests
+    public @ResponseBody
+    String addNewAddress() {
+        return "add-address";
+    }
+
+    @Value("${devServerAuthentication.login}")
+    private String devServerAuthentication;
+
+    @Value("${devServerAuthentication.register}")
+    private String devServerAuthenticationRegister;
+
+    @Value("${prodServerAuthentication.login}")
+    private String prodServerAuthentication;
+
+    @Value("${prodServerAuthentication.register}")
+    private String prodServerAuthenticationRegister;
 
     /*
     Source :
@@ -54,7 +81,7 @@ public class UserController {
     //@ResponseBody
     public String login(User user, HttpServletResponse response, HttpServletRequest req, RedirectAttributes redirectAttrs) {
         try {
-            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), serverAuthentication);
+            authenticatedUser = cs.signin(user.getUsername(), user.getPassword(), IS_PROD ?  prodServerAuthentication : devServerAuthentication);
             if (authenticatedUser.userIsNull()) {
                 return "authentification/signin_form";
             }
@@ -128,7 +155,7 @@ public class UserController {
     @PostMapping("/process_register")
     public String processRegister(User user, RedirectAttributes redirectAttrs) {
         try {
-            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), serverAuthenticationRegister);
+            CustomUserDetails register = cs.signup(user.getUsername(), user.getPassword(), IS_PROD ? prodServerAuthenticationRegister : devServerAuthenticationRegister);
             return "redirect:/login";
         } catch (CustomUserDetailsService.AuthManagerException e) {
             redirectAttrs.addFlashAttribute(ERROR_MSG_KEY, e.errors);
