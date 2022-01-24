@@ -28,15 +28,18 @@ import java.util.LinkedHashMap;
 @Service
 public class TokenProviderImpl implements TokenProvider {
     Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    //@Value("${authentication-test.auth.tokenSecret}")
-    private String tokenSecret = "secret";
+    private String tokenSecret = Constants.tokenSecretDefault;
 
     private boolean keyGenerated;
 
-    //@Value(value = "${mode.choice}")
 
-    //Define the key choice for jwt
-    private String jwtfileNamePath = "/opt/tomcat/webapps/zone_secret/jwt.txt";
+    //Define the key file for jwt
+    private String jwtfileNamePath = Constants.jwtfileNamePath;
+
+    //jwt token
+    private String ROLE = "role";
+    private String USERNAME = "username";
+    private String CHARSET = "UTF-8";
 
 
     private LinkedHashMap lp;
@@ -44,6 +47,7 @@ public class TokenProviderImpl implements TokenProvider {
     public TokenProviderImpl() {
         this.keyGenerated = false;
     }
+
 
 
     //Read file content into the string with - Files.lines(Path path, Charset cs)
@@ -60,7 +64,7 @@ public class TokenProviderImpl implements TokenProvider {
     }
 
     void generateKey() throws IOException {
-        if (!keyGenerated && Constants.mode.equals("prod")) {
+        if (!keyGenerated && Constants.IS_PROD) {
             logger.error("reade file");
             tokenSecret = readLine(jwtfileNamePath);
             keyGenerated = true;
@@ -71,11 +75,10 @@ public class TokenProviderImpl implements TokenProvider {
     @Override
     public HashMap setAccountFromToken(String token) throws Exception {
         generateKey();
-        Claims claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(Charset.forName("UTF-8"))).parseClaimsJws(token).getBody();
-        logger.error(claims.toString());
+        Claims claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(Charset.forName(CHARSET))).parseClaimsJws(token).getBody();
         lp = new LinkedHashMap();
-        lp.put("username", claims.getSubject());
-        lp.put("role", claims.get("role"));
+        lp.put(USERNAME, claims.getSubject());
+        lp.put(ROLE, claims.get(ROLE));
         if (lp == null) {
             throw new Exception("User hashamp is null 1");
         }
@@ -88,7 +91,7 @@ public class TokenProviderImpl implements TokenProvider {
         if (lp == null) {
             throw new Exception("User hashamp is null");
         }
-        return (String) lp.get("username");
+        return (String) lp.get(USERNAME);
     }
 
     @Override
@@ -96,7 +99,7 @@ public class TokenProviderImpl implements TokenProvider {
         if (lp == null) {
             throw new Exception("User hashamp is null");
         }
-        return (String) lp.get("role");
+        return (String) lp.get(ROLE);
     }
 
 
@@ -112,7 +115,7 @@ public class TokenProviderImpl implements TokenProvider {
         generateKey();
         try {
             // https://stackoverflow.com/questions/65306718/io-jsonwebtoken-signatureexception-jwt-signature-does-not-match-locally-compute
-            JwtParser jwt = Jwts.parser().setSigningKey(tokenSecret.getBytes(Charset.forName("UTF-8")));
+            JwtParser jwt = Jwts.parser().setSigningKey(tokenSecret.getBytes(Charset.forName(CHARSET)));
             jwt.parseClaimsJws(token.replace("{", "").replace("}", "")).getBody();
             return true;
         } catch (SignatureException ex) {

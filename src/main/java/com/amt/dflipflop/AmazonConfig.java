@@ -24,7 +24,7 @@ public class AmazonConfig {
 
     @Bean
     public AmazonS3 s3client() {
-        if(awsKey != null){
+        if(Constants.IS_PROD){
             BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKey, awsSecret);
             AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(Regions.fromName(region))
