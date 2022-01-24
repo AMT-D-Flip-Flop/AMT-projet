@@ -32,7 +32,6 @@ public class StoreControllerTests {
     @MockBean
     private AmazonS3 amazonS3;
 
-
     @Test
     public void shouldDisplayStore() throws Exception {
         this.mockMvc.perform(get("/store")).andExpect(status().isOk());

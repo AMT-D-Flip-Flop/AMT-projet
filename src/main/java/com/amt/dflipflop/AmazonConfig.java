@@ -35,6 +35,7 @@ public class AmazonConfig {
         }
         else{
             AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
+                    .withRegion(Regions.fromName("eu-central-1"))
                     .build();
 
             return amazonS3Client;
