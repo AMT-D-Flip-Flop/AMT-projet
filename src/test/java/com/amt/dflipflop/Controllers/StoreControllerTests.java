@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amt.dflipflop.AmazonConfig;
 import com.amt.dflipflop.Services.CategoryService;
 import com.amt.dflipflop.Services.ProductSelectionService;
 import com.amt.dflipflop.Services.ProductService;
@@ -26,6 +28,9 @@ public class StoreControllerTests {
 
     @MockBean
     private CategoryService categoryService;
+
+    @MockBean
+    private AmazonS3 amazonS3;
 
     @Test
     public void shouldDisplayStore() throws Exception {

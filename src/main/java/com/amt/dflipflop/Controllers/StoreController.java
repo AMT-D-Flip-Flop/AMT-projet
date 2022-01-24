@@ -1,9 +1,13 @@
 package com.amt.dflipflop.Controllers;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amt.dflipflop.Constants;
 import com.amt.dflipflop.Entities.Category;
 import com.amt.dflipflop.Entities.Product;
 import com.amt.dflipflop.Services.CategoryService;
 import com.amt.dflipflop.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -29,6 +33,12 @@ public class StoreController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private AmazonS3 amazonS3Client;
+
+    @Value("${aws.s3.bucket}")
+    private String bucket;
 
     @GetMapping("/store")
     public String getStorePage(@RequestParam(value = "cat", required = false) Integer catId, Model model) {
@@ -123,12 +133,20 @@ public class StoreController {
             product.setImageName(fileName);
 
             //Upload and write img
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = Paths.get(uploadDir).resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ioe) {
-                throw new IOException("Could not save image file: " + fileName, ioe);
+            if(IS_PROD){
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(multipartFile.getSize());
+                amazonS3Client.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
             }
+            else{
+                try (InputStream inputStream = multipartFile.getInputStream()) {
+                    Path filePath = Paths.get(uploadDir).resolve(fileName);
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ioe) {
+                    throw new IOException("Could not save image file: " + fileName, ioe);
+                }
+            }
+
         } else {
             product.setImageName(defaultImgName);
         }
@@ -204,11 +222,18 @@ public class StoreController {
             product.setImageName(fileName);
 
             //Upload and write img
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = Paths.get(uploadDir).resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ioe) {
-                throw new IOException("Could not save image file: " + fileName, ioe);
+            if(IS_PROD){
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(multipartFile.getSize());
+                amazonS3Client.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+            }
+            else{
+                try (InputStream inputStream = multipartFile.getInputStream()) {
+                    Path filePath = Paths.get(uploadDir).resolve(fileName);
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ioe) {
+                    throw new IOException("Could not save image file: " + fileName, ioe);
+                }
             }
         }
 

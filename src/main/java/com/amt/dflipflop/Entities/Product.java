@@ -64,7 +64,7 @@ public class Product {
 
     public String getImageRelativePath() {
         if (IS_PROD){
-            return "img/" + imageName;
+            return "https://s3.eu-central-1.amazonaws.com/dflipflop.diduno.education/" + imageName;
         } else {
             return "images/" + imageName;
         }
