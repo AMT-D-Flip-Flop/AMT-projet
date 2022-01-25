@@ -3,6 +3,7 @@ package com.amt.dflipflop.Entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ public class Product {
     @Getter @Setter private Float price;
     @Getter @Setter private String imageName;
     @Getter @Setter private Integer quantity;
-
 
     public void addCategory(Category cat) { categories.add(cat); }
     public void removeCategory(int index){ categories.remove(index) ;}
