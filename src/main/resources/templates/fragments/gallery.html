@@ -6,7 +6,7 @@
                     <div class="product_list">
                         <p class="item_name" th:text="${prod.getName()}"></p>
                         <div class="item_icon">
-                            <img th:src="${prod.getImageRelativePath()}" th:alt="${prod.getName()}"/>
+                            <img th:src="${prod.getImageRelativePath()}" onerror="this.onerror=null; this.src='images/default.png'" th:alt="${prod.getName()}"/>
                         </div>
                         <td>
                                            <span th:if="${prod.quantity > 0 &&  prod.getPrice() > 0}">
