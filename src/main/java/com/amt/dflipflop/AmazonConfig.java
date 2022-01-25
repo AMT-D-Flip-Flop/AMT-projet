@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.amt.dflipflop.Constants.IS_PROD;
+
+
 @Configuration
 public class AmazonConfig {
 
@@ -24,7 +27,7 @@ public class AmazonConfig {
 
     @Bean
     public AmazonS3 s3client() {
-        if(Constants.IS_PROD){
+        if(IS_PROD){
             BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKey, awsSecret);
             AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(Regions.fromName(region))
