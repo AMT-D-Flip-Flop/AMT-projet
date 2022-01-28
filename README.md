@@ -15,7 +15,7 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
 - Java 8
 - Maven
 
-- Le microservice ![Authentication](https://github.com/AMT-D-Flip-Flop/Authentication/) doit fonctionner en même temps que cette application pour que les utilisateurs puissent se connecter
+- Le microservice [Authentication](https://github.com/AMT-D-Flip-Flop/Authentication/) doit fonctionner en même temps que cette application pour que les utilisateurs puissent se connecter
 
 **Déploiement**
 - Ubuntu 20.04
@@ -30,7 +30,6 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
 - Créer une base de données ainsi qu'un utilisateur avec les droits sur celle-ci
   - Le dossier *Setup* met à disposition un docker compose permettant d'automatiser cette partie.
 
-  
 - Modifier le fichier *src/main/application.properties* avec la base de données et les identifiants de l'utilisateur
 
 - Dans com/amt/dflipflop/Constants.java :
@@ -48,7 +47,7 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
     ```
 
 
-- L'application est ensuite accessible à l'adresse http://localhost:8080
+- L'application est ensuite accessible à l'adresse [http://localhost:8080](http://localhost:8080)
 
 
 ## Déploiement
