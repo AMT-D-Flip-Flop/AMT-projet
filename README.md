@@ -15,10 +15,12 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
 - Java 8
 - Maven
 
+- Le microservice ![Authentication](https://github.com/AMT-D-Flip-Flop/Authentication/) doit fonctionner en même temps que cette application pour que les utilisateurs puissent se connecter
+
 **Déploiement**
 - Ubuntu 20.04
 
-## Installation
+## Installation locale
 - Cloner le repo
 
     ```bash
@@ -31,6 +33,14 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
   
 - Modifier le fichier *src/main/application.properties* avec la base de données et les identifiants de l'utilisateur
 
+- Dans com/amt/dflipflop/Constants.java :
+
+    - Pour le mode production, mettre la variable IS_PROD à true
+
+        `public final static Boolean IS_PROD = false;`
+
+    - Pour le mode local, mettre la variable IS_PROD à false
+
 
 - Lancer le projet:
     ```bash
@@ -38,10 +48,12 @@ DFlipFLop est une application e-commerce web qui offre à ses clients une large 
     ```
 
 
-
 - L'application est ensuite accessible à l'adresse http://localhost:8080
 
+
 ## Déploiement
+
+> Sur ce repo, le GitHub actions a été configuré pour effectuer le déploiement de la branche **main** automatiquement sur le serveur de production
 
 Pour déployer l'application, copiez le script *Setup/server-setup.sh* sur le serveur et suivez la procédure d'installation.
 
@@ -59,6 +71,13 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.
 </settings>
 ```
 Remplissez la partie username et password avec vos identifiants Tomcat.
+
+Sur la machine, configurer les variables d'environnement suivantes:
+- `AWS_REGION` : pour le bucket Amazon
+- `AWS_SECRET` : pour le bucket Amazon
+- `AWS_BUCKET` : pour le bucket Amazon
+- `AWS_KEY` : pour le bucket Amazon
+- `FLIPFLOP_PROD=true` : cette variable d'environnement permet au code de détecter si l'application tourne en local ou non
 
 Modifiez aussi le fichier pom.xml avec l'adresse de votre serveur (partie build).
 
