@@ -19,7 +19,7 @@ public class Constants {
     public static Boolean IS_PROD;
 
     //Prod
-    public final static String jwtfileNamePath = "/opt/tomcat/webapps/zone_secret/jwt.txt";
+    public final static String jwtfileNamePath = "/opt/tomcat/zone_secret/jwt.txt";
 
     //Local Use only
     public final static String tokenSecretDefault = "secret";
